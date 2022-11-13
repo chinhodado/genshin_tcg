@@ -36,3 +36,99 @@
     transform: rotate(360deg);
   }
 }
+
+html, body, #root {
+  height: 99%;
+}
+
+#main-container {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid blue;
+  height: 100%;
+}
+
+#left-panel {
+  border-right:  1px solid black;
+  width: 300px;
+}
+
+#right-panel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#top-field {
+  border-bottom:  1px solid black;
+  flex-grow: 1;
+}
+
+#bottom-field {
+  flex-grow: 1;
+  position: relative;
+}
+
+#dice-1 {
+  /*border: 1px solid black;*/
+  right: 3%;
+  top: 5%;
+  width: 350px;
+  height: 150px;
+  position: absolute;
+}
+
+#dice-table-1 {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+}
+
+#dice-table-1 td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+#deck-1 {
+  border: 1px solid black;
+  right: 3%;
+  top: 45%;
+  width: 90px;
+  height: 120px;
+  position: absolute;
+}
+
+#active-char-1 {
+  border: 1px solid black;
+  right: 50%;
+  top: 5%;
+  width: 90px;
+  height: 120px;
+  position: absolute;
+}
+
+#bench1-char-1 {
+  border: 1px solid black;
+  right: 40%;
+  top: 35%;
+  width: 90px;
+  height: 120px;
+  position: absolute;
+}
+
+#bench2-char-1 {
+  border: 1px solid black;
+  right: 60%;
+  top: 35%;
+  width: 90px;
+  height: 120px;
+  position: absolute;
+}
+
+.dice {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid black;
+}
