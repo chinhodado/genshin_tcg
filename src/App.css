@@ -125,10 +125,11 @@ html, body, #root {
   position: absolute;
 }
 
-.dice {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid black;
+#action-box-1 {
+  border: 1px solid black;
+  left: 3%;
+  top: 5%;
+  width: 90px;
+  height: 120px;
+  position: absolute;
 }
