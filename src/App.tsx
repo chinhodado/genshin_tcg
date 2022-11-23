@@ -5,9 +5,15 @@ import {Cards} from "./Cards";
 
 function App() {
   let [state, setState] = useState({
-    dices: [[0,0,0,0,0,0,0,0]],
+    dices: [[0, 0, 0, 0, 0, 0, 0, 0]],
     characters: [{
       base: Cards.Diluc,
+      currentHp: 10
+    }, {
+      base: Cards.Ganyu,
+      currentHp: 10
+    }, {
+      base: Cards.Xingqiu,
       currentHp: 10
     }]
   });
@@ -24,6 +30,8 @@ function App() {
 
   let playerDices = state.dices[0];
   let imgPath = "img/cards/" + state.characters[0].base.img + ".webp";
+  let imgPath2 = "img/cards/" + state.characters[1].base.img + ".webp";
+  let imgPath3 = "img/cards/" + state.characters[2].base.img + ".webp";
   return (
     <div id="main-container">
       <div id="left-panel">Event log</div>
@@ -33,8 +41,12 @@ function App() {
           <div id="active-char-1">
             <img src={imgPath} alt="active-char-1" className="card"/>
           </div>
-          <div id="bench1-char-1"></div>
-          <div id="bench2-char-1"></div>
+          <div id="bench1-char-1">
+            <img src={imgPath2} alt="bench1-char-1" className="card"/>
+          </div>
+          <div id="bench2-char-1">
+            <img src={imgPath3} alt="bench2-char-1" className="card"/>
+          </div>
           <div id="dice-1">
             <table id="dice-table-1">
               <tbody>

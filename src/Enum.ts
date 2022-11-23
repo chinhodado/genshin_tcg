@@ -8,7 +8,22 @@ export enum ElementType {
   Geo,
   Anemo,
   Dendro,
-  Omni
+  Omni,
+  Physical,
+  Black,
+  White
+}
+
+export enum WeaponType {
+  Claymore,
+  Sword,
+  Bow,
+  Catalyst,
+  Polearm
+}
+
+export enum CardType {
+  Character
 }
 
 export type CardInDeck = {
