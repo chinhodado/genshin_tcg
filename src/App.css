@@ -37,6 +37,46 @@
   }
 }
 
+.pyro {
+  color: #bf2818;
+  font-weight: bold;
+}
+
+.hydro {
+  color: #0b4dda;
+  font-weight: bold;
+}
+
+.cryo {
+  color: #4878a8;
+  font-weight: bold;
+}
+
+.electro {
+  color: #9336b0;
+  font-weight: bold;
+}
+
+.anemo {
+  color: #26a684;
+  font-weight: bold;
+}
+
+.geo {
+  color: #B68D07;
+  font-weight: bold;
+}
+
+.dendro {
+  color: #51810E;
+  font-weight: bold;
+}
+
+.omni {
+  color: black;
+  font-weight: bold;
+}
+
 html, body, #root {
   height: 99%;
 }

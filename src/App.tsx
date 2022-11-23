@@ -52,16 +52,16 @@ function App() {
             <table id="dice-table-1">
               <tbody>
                 <tr>
-                  <td><div id="dice-pyro-1" className="dice">Pyro: {playerDices[ElementType.Pyro]}</div></td>
-                  <td><div id="dice-cryo-1" className="dice">Cryo: {playerDices[ElementType.Cryo]}</div></td>
-                  <td><div id="dice-hydro-1" className="dice">Hydro: {playerDices[ElementType.Hydro]}</div></td>
-                  <td><div id="dice-electro-1" className="dice">Electro: {playerDices[ElementType.Electro]}</div></td>
+                  <td><div id="dice-pyro-1" className="dice pyro">Pyro: {playerDices[ElementType.Pyro]}</div></td>
+                  <td><div id="dice-cryo-1" className="dice cryo">Cryo: {playerDices[ElementType.Cryo]}</div></td>
+                  <td><div id="dice-hydro-1" className="dice hydro">Hydro: {playerDices[ElementType.Hydro]}</div></td>
+                  <td><div id="dice-electro-1" className="dice electro">Electro: {playerDices[ElementType.Electro]}</div></td>
                 </tr>
                 <tr>
-                  <td><div id="dice-geo-1" className="dice">Geo: {playerDices[ElementType.Geo]}</div></td>
-                  <td><div id="dice-anemo-1" className="dice">Anemo: {playerDices[ElementType.Anemo]}</div></td>
-                  <td><div id="dice-dendro-1" className="dice">Dendro: {playerDices[ElementType.Dendro]}</div></td>
-                  <td><div id="dice-omni-1" className="dice">Omni: {playerDices[ElementType.Omni]}</div></td>
+                  <td><div id="dice-geo-1" className="dice geo">Geo: {playerDices[ElementType.Geo]}</div></td>
+                  <td><div id="dice-anemo-1" className="dice anemo">Anemo: {playerDices[ElementType.Anemo]}</div></td>
+                  <td><div id="dice-dendro-1" className="dice dendro">Dendro: {playerDices[ElementType.Dendro]}</div></td>
+                  <td><div id="dice-omni-1" className="dice omni">Omni: {playerDices[ElementType.Omni]}</div></td>
                 </tr>
               </tbody>
             </table>
