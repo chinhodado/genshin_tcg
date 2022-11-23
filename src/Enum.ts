@@ -1,3 +1,5 @@
+import {Card} from "./Cards";
+
 export enum ElementType {
   Pyro,
   Cryo,
@@ -7,4 +9,9 @@ export enum ElementType {
   Anemo,
   Dendro,
   Omni
+}
+
+export type CardInDeck = {
+  base: Card,
+  currentHp: number
 }
