@@ -89,13 +89,28 @@ html, body, #root {
   border-collapse: collapse;
 }
 
-#deck-1 {
+#active-char-1-skills {
   border: 1px solid black;
-  right: 3%;
-  top: 45%;
-  width: 90px;
+  right: 1%;
+  bottom: 1%;
+  width: 390px;
   height: 120px;
   position: absolute;
+}
+
+#active-char-1-skills-label {
+  background-color: bisque;
+  text-align: center;
+}
+
+#active-char-1-skills-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#active-char-1-skills-table td {
+  border: 1px solid black;
+  border-collapse: collapse;
 }
 
 #active-char-1 {

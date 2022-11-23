@@ -32,6 +32,7 @@ function App() {
   let imgPath = "img/cards/" + state.characters[0].base.img + ".webp";
   let imgPath2 = "img/cards/" + state.characters[1].base.img + ".webp";
   let imgPath3 = "img/cards/" + state.characters[2].base.img + ".webp";
+  let activeChar = state.characters[0];
   return (
     <div id="main-container">
       <div id="left-panel">Event log</div>
@@ -65,7 +66,25 @@ function App() {
               </tbody>
             </table>
           </div>
-          <div id="deck-1">Deck</div>
+          <div id="active-char-1-skills">
+            <div id="active-char-1-skills-label">
+              Skills
+            </div>
+            <table id="active-char-1-skills-table">
+              <tr>
+                <td>Normal</td>
+                <td>Skill</td>
+                <td>Burst</td>
+                <td>Special</td>
+              </tr>
+              <tr>
+                <td>{activeChar.base.skills.normal.cost}</td>
+                <td>{activeChar.base.skills.skill.cost}</td>
+                <td>{activeChar.base.skills.burst.cost} + ({activeChar.base.skills.burst.energy}E)</td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
           <div id="action-box-1">
             <input type="button" value="Roll dice" onClick={rollDiceCallback}/>
           </div>
