@@ -1,7 +1,13 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
 import {ElementType} from "./Enum";
-import {Cards} from "./Cards";
+import {Card, Cards} from "./Cards";
+import CardUI from "./CardUI";
+
+export type CardInGame = {
+  base: Card
+  currentHp: number
+}
 
 function App() {
   let [state, setState] = useState({
@@ -31,19 +37,25 @@ function App() {
   }, [state.dices]);
 
   let playerDices = state.dices[0];
-  let imgPath = "img/cards/" + state.activeChar.base.img + ".webp";
-  let imgPath2 = "img/cards/" + state.bench1Char.base.img + ".webp";
-  let imgPath3 = "img/cards/" + state.bench2Char.base.img + ".webp";
 
-  function switchActiveChar() {
+  function switchActiveChar(charPos: number) {
     setState(prevState => {
       let oldActiveChar = prevState.activeChar;
-      let oldBench1Char = prevState.bench1Char;
-      return {
+      let oldBenchChar = charPos === 1? prevState.bench1Char : prevState.bench2Char;
+
+      let newState = {
         ...prevState,
-        activeChar: oldBench1Char,
-        bench1Char: oldActiveChar
+        activeChar: oldBenchChar,
       }
+
+      if (charPos === 1) {
+        newState.bench1Char = oldActiveChar;
+      }
+      else {
+        newState.bench2Char = oldActiveChar;
+      }
+
+      return newState;
     })
   }
 
@@ -53,16 +65,10 @@ function App() {
       <div id="right-panel">
         <div id="top-field"></div>
         <div id="bottom-field">
-          <div id="active-char-1">
-            <img src={imgPath} alt="active-char-1" className="card"/>
-          </div>
-          <div id="bench1-char-1">
-            <input type="button" value="Switch" onClick={switchActiveChar} className="char-switch-button"/>
-            <img src={imgPath2} alt="bench1-char-1" className="card"/>
-          </div>
-          <div id="bench2-char-1">
-            <img src={imgPath3} alt="bench2-char-1" className="card"/>
-          </div>
+          <CardUI card={state.activeChar} charPosition={0} id="active-char-1"></CardUI>
+          <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-1" onCharSwitch={switchActiveChar}></CardUI>
+          <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}></CardUI>
+
           <div id="dice-1">
             <table id="dice-table-1">
               <tbody>
