@@ -1,12 +1,47 @@
 import {CardType, ElementType, WeaponType} from "./Enum";
 
 export type Card = {
-  id: string
+  id: number
   name: string
   img: string
+  element: ElementType
+  weapon: WeaponType
+  cardType: CardType
+  skills: {
+    normal: {
+      name: string
+      cost: string
+      desc: string
+      dmg: number
+      dmgElement: ElementType
+    }
+    skill: {
+      name: string
+      cost: string
+      desc: string
+      dmgElement: ElementType
+    }
+    burst: {
+      name: string
+      cost: string
+      energy: number
+      desc: string
+      dmgElement: ElementType
+    }
+    special?: {
+      name: string
+      cost: string
+      desc: string
+      dmgElement: ElementType
+    }
+  }
 }
 
-export const Cards = {
+export interface CardMap {
+  [key: string]: Card;
+}
+
+export const Cards: CardMap = {
   "Diluc": {
     id: 1,
     name: "Diluc",

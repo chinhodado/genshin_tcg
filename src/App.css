@@ -192,3 +192,8 @@ html, body, #root {
 .card {
   width: 100%
 }
+
+.char-switch-button {
+  left: -50px;
+  position: absolute;
+}

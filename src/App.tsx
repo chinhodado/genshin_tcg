@@ -6,16 +6,18 @@ import {Cards} from "./Cards";
 function App() {
   let [state, setState] = useState({
     dices: [[0, 0, 0, 0, 0, 0, 0, 0]],
-    characters: [{
+    activeChar: {
       base: Cards.Diluc,
       currentHp: 10
-    }, {
+    },
+    bench1Char: {
       base: Cards.Ganyu,
       currentHp: 10
-    }, {
+    },
+    bench2Char: {
       base: Cards.Xingqiu,
       currentHp: 10
-    }]
+    },
   });
 
   let rollDiceCallback = useCallback((e: React.MouseEvent) => {
@@ -29,10 +31,22 @@ function App() {
   }, [state.dices]);
 
   let playerDices = state.dices[0];
-  let imgPath = "img/cards/" + state.characters[0].base.img + ".webp";
-  let imgPath2 = "img/cards/" + state.characters[1].base.img + ".webp";
-  let imgPath3 = "img/cards/" + state.characters[2].base.img + ".webp";
-  let activeChar = state.characters[0];
+  let imgPath = "img/cards/" + state.activeChar.base.img + ".webp";
+  let imgPath2 = "img/cards/" + state.bench1Char.base.img + ".webp";
+  let imgPath3 = "img/cards/" + state.bench2Char.base.img + ".webp";
+
+  function switchActiveChar() {
+    setState(prevState => {
+      let oldActiveChar = prevState.activeChar;
+      let oldBench1Char = prevState.bench1Char;
+      return {
+        ...prevState,
+        activeChar: oldBench1Char,
+        bench1Char: oldActiveChar
+      }
+    })
+  }
+
   return (
     <div id="main-container">
       <div id="left-panel">Event log</div>
@@ -43,6 +57,7 @@ function App() {
             <img src={imgPath} alt="active-char-1" className="card"/>
           </div>
           <div id="bench1-char-1">
+            <input type="button" value="Switch" onClick={switchActiveChar} className="char-switch-button"/>
             <img src={imgPath2} alt="bench1-char-1" className="card"/>
           </div>
           <div id="bench2-char-1">
@@ -78,9 +93,9 @@ function App() {
                 <td>Special</td>
               </tr>
               <tr>
-                <td>{getSkillCostDisplay(activeChar.base.skills.normal.cost)}</td>
-                <td>{getSkillCostDisplay(activeChar.base.skills.skill.cost)}</td>
-                <td>{getSkillCostDisplay(activeChar.base.skills.burst.cost)} + ({activeChar.base.skills.burst.energy}E)</td>
+                <td>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
+                <td>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
+                <td>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
                 <td></td>
               </tr>
             </table>
