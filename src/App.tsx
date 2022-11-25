@@ -26,6 +26,13 @@ function App() {
       base: Cards.Xingqiu,
       currentHp: 10
     },
+
+    // For displaying the card detail popup
+    // TODO isClicked not used right now, may want to add handle for that later
+    //  (click on card to make the card detail popup sticky)
+    isClicked: false,
+    isHovering: false,
+    idForCardDetail: ''
   });
 
   let rollDiceCallback = useCallback((e: React.MouseEvent) => {
@@ -61,16 +68,54 @@ function App() {
     })
   }
 
+  function onMouseEnter(event: any) {
+    if (state.isClicked) {
+      return;
+    }
+
+    setState(prevState => ({
+      ...prevState,
+      isHovering: true,
+      idForCardDetail: event.target.id
+    }));
+  }
+
+  function onMouseLeave(event: any) {
+    if (state.isClicked) {
+      return;
+    }
+
+    setState(prevState => ({
+      ...prevState,
+      isHovering: false,
+    }));
+  }
+
+  function getCardByUiId(id: string) {
+    if (id === 'active-char-1-img') {
+      return state.activeChar;
+    }
+    else if (id === 'bench1-char-1-img') {
+      return state.bench1Char;
+    }
+    else /*if (pos === 2)*/ {
+      return state.bench2Char;
+    }
+  }
+
   return (
     <div id="main-container">
-      <CardDetailPopup card={state.activeChar}></CardDetailPopup>
+      {(state.isHovering || state.isClicked) && <CardDetailPopup card={getCardByUiId(state.idForCardDetail)}></CardDetailPopup>}
       <div id="left-panel">Event log</div>
       <div id="right-panel">
         <div id="top-field"></div>
         <div id="bottom-field">
-          <CardUI card={state.activeChar} charPosition={0} id="active-char-1"></CardUI>
-          <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-1" onCharSwitch={switchActiveChar}></CardUI>
-          <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}></CardUI>
+          <CardUI card={state.activeChar} charPosition={0} id="active-char-1"
+                  onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
+          <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-1" onCharSwitch={switchActiveChar}
+                  onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
+          <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}
+                  onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
 
           <div id="dice-1">
             <table id="dice-table-1">

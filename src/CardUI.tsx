@@ -6,6 +6,8 @@ type CardUIProps = {
   charPosition: number
   id: string
   onCharSwitch?: (charPos: number) => void
+  onMouseEnter: any
+  onMouseLeave: any
 }
 
 function CardUI(props: CardUIProps) {
@@ -18,7 +20,7 @@ function CardUI(props: CardUIProps) {
   return (
     <div className="card-ui" id={props.id}>
       {props.charPosition === 0 || <input type="button" value="Switch" className="char-switch-button" onClick={switchChar}/>}
-      <img src={imgPath} alt="card" className="card"/>
+      <img src={imgPath} alt="card" className="card" id={props.id + "-img"} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}/>
     </div>
   )
 }

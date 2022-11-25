@@ -173,7 +173,7 @@ body {
 }
 
 .card-ui {
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   width: 90px;
   height: 150px;
   position: absolute;
