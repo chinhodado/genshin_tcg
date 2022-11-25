@@ -3,6 +3,8 @@ import './App.css';
 import {ElementType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./CardUI";
+import CardDetailPopup from "./CardDetailPopup";
+import {getSkillCostDisplay} from "./Util";
 
 export type CardInGame = {
   base: Card
@@ -61,6 +63,7 @@ function App() {
 
   return (
     <div id="main-container">
+      <CardDetailPopup card={state.activeChar}></CardDetailPopup>
       <div id="left-panel">Event log</div>
       <div id="right-panel">
         <div id="top-field"></div>
@@ -92,18 +95,22 @@ function App() {
               Skills
             </div>
             <table id="active-char-1-skills-table">
-              <tr>
-                <td>Normal</td>
-                <td>Skill</td>
-                <td>Burst</td>
-                <td>Special</td>
-              </tr>
-              <tr>
-                <td>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
-                <td>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
-                <td>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
-                <td></td>
-              </tr>
+              <thead>
+                <tr>
+                  <td>Normal</td>
+                  <td>Skill</td>
+                  <td>Burst</td>
+                  <td>Special</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
+                  <td>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
+                  <td>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
+                  <td></td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div id="action-box-1">
@@ -122,38 +129,6 @@ function rollDice(current: number[]) {
     arr[elem]++
   }
   return arr;
-}
-
-function getSkillCostDisplay(cost: string) {
-  let html = [];
-  for (let i = 0; i < cost.length; i++) {
-    if (cost[i] === 'P') {
-      html.push(<span className="pyro">P</span>)
-    }
-    else if (cost[i] === 'H') {
-      html.push(<span className="hydro">H</span>)
-    }
-    else if (cost[i] === 'C') {
-      html.push(<span className="cryo">C</span>)
-    }
-    else if (cost[i] === 'E') {
-      html.push(<span className="electro">E</span>)
-    }
-    else if (cost[i] === 'G') {
-      html.push(<span className="geo">G</span>)
-    }
-    else if (cost[i] === 'A') {
-      html.push(<span className="anemo">A</span>)
-    }
-    else if (cost[i] === 'D') {
-      html.push(<span className="dendro">D</span>)
-    }
-    else if (cost[i] === 'B') {
-      html.push(<span className="omni">B</span>)
-    }
-  }
-
-  return html;
 }
 
 function randomIntFromInterval(min: number, max: number) { // min and max included

@@ -81,6 +81,10 @@ html, body, #root {
   height: 99%;
 }
 
+body {
+  font-family: monospace;
+}
+
 #main-container {
   display: flex;
   flex-direction: row;
@@ -159,7 +163,7 @@ html, body, #root {
 }
 
 #bench1-char-1 {
-  right: 40%;
+  right: 35%;
   top: 35%;
 }
 
@@ -191,4 +195,34 @@ html, body, #root {
 .char-switch-button {
   left: -50px;
   position: absolute;
+}
+
+.card-detail-popup {
+  width: 400px;
+  height: 500px;
+  background-color: white;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 99;
+  border: 2px solid grey;
+  border-radius: 5px;
+}
+
+.card-detail-popup-table {
+  border-collapse: collapse;
+}
+
+.card-detail-popup-table td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.card-detail-name td {
+  text-align: center;
+  background-color: bisque;
 }
