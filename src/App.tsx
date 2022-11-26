@@ -108,8 +108,11 @@ function App() {
       {(state.isHovering || state.isClicked) && <CardDetailPopup card={getCardByUiId(state.idForCardDetail)}></CardDetailPopup>}
       <div id="left-panel">Event log</div>
       <div id="right-panel">
-        <div id="top-field"></div>
+        <div id="top-field">
+          <div id="player2-info"><h3>Player 2</h3></div>
+        </div>
         <div id="bottom-field">
+          <div id="player1-info"><h3>Player 1</h3></div>
           <CardUI card={state.activeChar} charPosition={0} id="active-char-1"
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
           <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-1" onCharSwitch={switchActiveChar}

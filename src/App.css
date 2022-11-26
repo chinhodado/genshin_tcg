@@ -106,6 +106,7 @@ body {
 #top-field {
   border-bottom:  1px solid black;
   flex-grow: 1;
+  position: relative;
 }
 
 #bottom-field {
@@ -225,4 +226,16 @@ body {
 .card-detail-name td {
   text-align: center;
   background-color: bisque;
+}
+
+#player1-info {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+}
+
+#player2-info {
+  position: absolute;
+  left: 10px;
+  top: 0;
 }
