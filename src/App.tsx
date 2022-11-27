@@ -4,7 +4,8 @@ import {ElementType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./CardUI";
 import CardDetailPopup from "./CardDetailPopup";
-import {getSkillCostDisplay} from "./Util";
+import {getSkillCostDisplay, randomIntFromInterval} from "./Util";
+import RollDiceDialog from "./RollDiceDialog";
 
 export type CardInGame = {
   base: Card
@@ -34,6 +35,15 @@ function App() {
     isHovering: false,
     idForCardDetail: ''
   });
+  const [isRollDiceDialogOpened, setRollDiceDialogOpened] = React.useState(false);
+
+  function openRollDiceDialog() {
+    setRollDiceDialogOpened(true);
+  }
+
+  function closeRollDiceDialog() {
+    setRollDiceDialogOpened(false);
+  }
 
   let rollDiceCallback = useCallback((e: React.MouseEvent) => {
     let newDices = rollDice(state.dices[0]);
@@ -43,6 +53,7 @@ function App() {
         dices: [newDices]
       }
     })
+    openRollDiceDialog();
   }, [state.dices]);
 
   let playerDices = state.dices[0];
@@ -105,6 +116,7 @@ function App() {
 
   return (
     <div id="main-container">
+      <RollDiceDialog isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}></RollDiceDialog>
       {(state.isHovering || state.isClicked) && <CardDetailPopup card={getCardByUiId(state.idForCardDetail)}></CardDetailPopup>}
       <div id="left-panel">Event log</div>
       <div id="right-panel">
@@ -179,7 +191,4 @@ function rollDice(current: number[]) {
   return arr;
 }
 
-function randomIntFromInterval(min: number, max: number) { // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
 export default App;

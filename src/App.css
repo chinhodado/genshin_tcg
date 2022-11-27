@@ -239,3 +239,7 @@ body {
   left: 10px;
   top: 0;
 }
+
+.dice-roll-box {
+  width: 70px;
+}

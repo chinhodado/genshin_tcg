@@ -55,3 +55,8 @@ export function getElementDisplay(element: ElementType, s: string) {
       return <span className="bold">{s}</span>
   }
 }
+
+
+export function randomIntFromInterval(min: number, max: number) { // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
