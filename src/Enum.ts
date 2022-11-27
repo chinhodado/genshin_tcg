@@ -11,7 +11,19 @@ export enum ElementType {
   Omni,
   Physical,
   Black,
-  White
+  White,
+  Empty
+}
+
+export const LetterElementMap: any = {
+  P: ElementType.Pyro,
+  C: ElementType.Cryo,
+  H: ElementType.Hydro,
+  E: ElementType.Electro,
+  G: ElementType.Geo,
+  A: ElementType.Anemo,
+  D: ElementType.Dendro,
+  B: ElementType.Black
 }
 
 export enum WeaponType {
@@ -29,4 +41,15 @@ export enum CardType {
 export type CardInDeck = {
   base: Card,
   currentHp: number
+}
+
+export const ImageMap: any = {
+  [ElementType.Anemo]: "Element_Anemo.svg",
+  [ElementType.Cryo]: "Element_Cryo.svg",
+  [ElementType.Electro]: "Element_Electro.svg",
+  [ElementType.Geo]: "Element_Geo.svg",
+  [ElementType.Dendro]: "Element_Dendro.svg",
+  [ElementType.Hydro]: "Element_Hydro.svg",
+  [ElementType.Pyro]: "Element_Pyro.svg",
+  [ElementType.Omni]: "Icon_CD_Carefree_Coin.webp"
 }

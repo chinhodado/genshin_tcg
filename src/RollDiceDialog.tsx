@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import React, {useState} from "react";
 import {randomIntFromInterval} from "./Util";
-import {ElementType} from "./Enum";
+import {ImageMap} from "./Enum";
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
@@ -26,17 +26,6 @@ function RollDiceDialog(props: RollDiceDialogProps) {
   let [rerollDone, setRerollDone] = useState(false);
   let [diceValues, setDiceValues] = useState([0,0,0,0,0,0,0,0]);
   let [selectedDices, setSelectedDices] = useState([false, false, false, false, false, false, false, false]);
-
-  let imgMap: any = {
-    [ElementType.Anemo]: "Element_Anemo.svg",
-    [ElementType.Cryo]: "Element_Cryo.svg",
-    [ElementType.Electro]: "Element_Electro.svg",
-    [ElementType.Geo]: "Element_Geo.svg",
-    [ElementType.Dendro]: "Element_Dendro.svg",
-    [ElementType.Hydro]: "Element_Hydro.svg",
-    [ElementType.Pyro]: "Element_Pyro.svg",
-    [ElementType.Omni]: "Icon_CD_Carefree_Coin.webp"
-  }
 
   function rollDice(isReroll: boolean) {
     let arr = [...diceValues];
@@ -80,11 +69,15 @@ function RollDiceDialog(props: RollDiceDialogProps) {
     return (
       <td key={idx}>
         <img className={className}
-             src={"img/" + imgMap[diceValues[idx]]}
+             src={"img/" + ImageMap[diceValues[idx]]}
              alt="dice"
              onClick={() => onDiceClicked(idx)}/>
       </td>
     );
+  }
+
+  function atLeastOneDiceSelected() {
+    return selectedDices.includes(true);
   }
 
   return <Modal
@@ -105,7 +98,7 @@ function RollDiceDialog(props: RollDiceDialogProps) {
         </tbody>
       </table>
       <div>Select one or more dices to re-roll them (once)</div>
-      <button onClick={rerollDice} disabled={rerollDone}>Reroll</button>
+      <button onClick={rerollDice} disabled={rerollDone || !atLeastOneDiceSelected()}>Reroll</button>
       <button onClick={() => props.closeModal(diceValues)}>Done</button>
     </div>
   </Modal>

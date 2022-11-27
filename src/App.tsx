@@ -4,8 +4,9 @@ import {ElementType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./CardUI";
 import CardDetailPopup from "./CardDetailPopup";
-import {getSkillCostDisplay, randomIntFromInterval} from "./Util";
+import {getSkillCostDisplay, rawDicesToTotalDices} from "./Util";
 import RollDiceDialog from "./RollDiceDialog";
+import SelectDiceCostDialog from "./SelectDiceCostDialog";
 
 export type CardInGame = {
   base: Card
@@ -14,7 +15,8 @@ export type CardInGame = {
 
 function App() {
   let [state, setState] = useState({
-    dices: [[0, 0, 0, 0, 0, 0, 0, 0]],
+    totalDices: [[0, 0, 0, 0, 0, 0, 0, 0]],
+    rawDices: [[0, 0, 0, 0, 0, 0, 0, 0]],
     activeChar: {
       base: Cards.Diluc,
       currentHp: 10
@@ -36,42 +38,43 @@ function App() {
     idForCardDetail: ''
   });
   const [isRollDiceDialogOpened, setRollDiceDialogOpened] = React.useState(false);
+  const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = React.useState(false);
+  const [selectedSkillCostString, setSelectedSkillCostString] = React.useState("PP");
 
   function openRollDiceDialog() {
     setRollDiceDialogOpened(true);
   }
 
+  function openSelectDiceCostDialog() {
+    setSelectDiceCostDialogOpened(true);
+  }
+
   function closeRollDiceDialog(result: number[]) {
     setRollDiceDialogOpened(false);
-    let newCountArr = diceArrayToDiceCountArray(result);
+    let newCountArr = rawDicesToTotalDices(result);
     setState(prevState => {
       return {
         ...prevState,
-        dices: [newCountArr]
+        totalDices: [newCountArr],
+        rawDices: [result]
       }
     })
   }
 
-  function diceArrayToDiceCountArray(arr: number[]) {
-    let result = [0, 0, 0, 0, 0, 0, 0, 0];
-    for (let i = 0; i < arr.length; i++) {
-      result[arr[i]] += 1;
-    }
-    return result;
+  function confirmSelectDiceCostDialog() {
+    // TODO set state
+    setSelectDiceCostDialogOpened(false);
   }
 
-  let rollDiceCallback = useCallback((e: React.MouseEvent) => {
-    // let newDices = rollDice(state.dices[0]);
-    // setState(prevState => {
-    //   return {
-    //     ...prevState,
-    //     dices: [newDices]
-    //   }
-    // })
+  function cancelSelectDiceCostDialog() {
+    setSelectDiceCostDialogOpened(false);
+  }
+
+  let rollDiceCallback = useCallback((_e: React.MouseEvent) => {
     openRollDiceDialog();
   }, []);
 
-  let playerDices = state.dices[0];
+  let playerDices = state.totalDices[0];
 
   function switchActiveChar(charPos: number) {
     setState(prevState => {
@@ -106,7 +109,7 @@ function App() {
     }));
   }
 
-  function onMouseLeave(event: any) {
+  function onMouseLeave(_event: any) {
     if (state.isClicked) {
       return;
     }
@@ -132,6 +135,11 @@ function App() {
   return (
     <div id="main-container">
       <RollDiceDialog isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}></RollDiceDialog>
+      <SelectDiceCostDialog isOpen={isSelectDiceCostDialogOpened}
+                            confirmFn={confirmSelectDiceCostDialog}
+                            cancelFn={cancelSelectDiceCostDialog}
+                            dices={state.rawDices[0]}
+                            costString={selectedSkillCostString}/>
       {(state.isHovering || state.isClicked) && <CardDetailPopup card={getCardByUiId(state.idForCardDetail)}></CardDetailPopup>}
       <div id="left-panel">Event log</div>
       <div id="right-panel">
@@ -180,7 +188,7 @@ function App() {
               </thead>
               <tbody>
                 <tr>
-                  <td>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
+                  <td onClick={openSelectDiceCostDialog}>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
                   <td>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
                   <td>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
                   <td></td>
@@ -195,15 +203,6 @@ function App() {
       </div>
     </div>
   );
-}
-
-function rollDice(current: number[]) {
-  let arr = [0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < arr.length; i++) {
-    let elem = randomIntFromInterval(0, 7);
-    arr[elem]++
-  }
-  return arr;
 }
 
 export default App;

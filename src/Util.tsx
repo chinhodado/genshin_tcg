@@ -1,5 +1,5 @@
 import React from "react";
-import {ElementType} from "./Enum";
+import {ElementType, LetterElementMap} from "./Enum";
 
 export function getSkillCostDisplay(cost: string) {
   let html = [];
@@ -59,4 +59,51 @@ export function getElementDisplay(element: ElementType, s: string) {
 
 export function randomIntFromInterval(min: number, max: number) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+export function isBasicElement(type: ElementType) {
+  return type === ElementType.Electro
+    || type === ElementType.Pyro
+    || type === ElementType.Hydro
+    || type === ElementType.Cryo
+    || type === ElementType.Anemo
+    || type === ElementType.Geo
+    || type === ElementType.Dendro
+}
+
+export function rawDicesToTotalDices(rawDices: number[]) {
+  let result = [0, 0, 0, 0, 0, 0, 0, 0];
+  for (let i = 0; i < rawDices.length; i++) {
+    result[rawDices[i]] += 1;
+  }
+  return result;
+}
+
+export function canSatisfyCostRequirement(cost: string, rawDices: number[]) {
+  let totalDices = rawDicesToTotalDices(rawDices);
+  let blackCount = 0;
+  for (let i = 0; i < cost.length; i++) {
+    let c = cost[i];
+    let element = LetterElementMap[c];
+
+    // TODO handle white cost
+    if (isBasicElement(element)) {
+      if (totalDices[element] > 0) {
+        totalDices[element]--;
+      }
+      else {
+        totalDices[ElementType.Omni]--;
+      }
+    }
+    else if (c === 'B') {
+      blackCount++;
+    }
+  }
+
+  if (totalDices[ElementType.Omni] < 0) {
+    return false;
+  }
+
+  let leftoverSum = totalDices.reduce((a, b) => a + b, 0);
+  return leftoverSum >= blackCount;
 }
