@@ -41,20 +41,35 @@ function App() {
     setRollDiceDialogOpened(true);
   }
 
-  function closeRollDiceDialog() {
+  function closeRollDiceDialog(result: number[]) {
     setRollDiceDialogOpened(false);
-  }
-
-  let rollDiceCallback = useCallback((e: React.MouseEvent) => {
-    let newDices = rollDice(state.dices[0]);
+    let newCountArr = diceArrayToDiceCountArray(result);
     setState(prevState => {
       return {
         ...prevState,
-        dices: [newDices]
+        dices: [newCountArr]
       }
     })
+  }
+
+  function diceArrayToDiceCountArray(arr: number[]) {
+    let result = [0, 0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < arr.length; i++) {
+      result[arr[i]] += 1;
+    }
+    return result;
+  }
+
+  let rollDiceCallback = useCallback((e: React.MouseEvent) => {
+    // let newDices = rollDice(state.dices[0]);
+    // setState(prevState => {
+    //   return {
+    //     ...prevState,
+    //     dices: [newDices]
+    //   }
+    // })
     openRollDiceDialog();
-  }, [state.dices]);
+  }, []);
 
   let playerDices = state.dices[0];
 
