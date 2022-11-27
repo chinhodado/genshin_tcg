@@ -243,3 +243,7 @@ body {
 .dice-roll-box {
   width: 70px;
 }
+
+.dice-roll-box.clicked {
+  background-color: bisque;
+}
