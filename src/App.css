@@ -184,7 +184,7 @@ body {
 
 .char-switch-button {
   left: -50px;
-  bottom: 0px;
+  bottom: 0;
   position: absolute;
 }
 

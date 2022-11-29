@@ -76,7 +76,7 @@ function App() {
       return {
         ...prevState,
         totalDices: [newCountArr],
-        rawDices: [result]
+        rawDices: [result.sort()]
       }
     })
   }
@@ -191,7 +191,6 @@ function App() {
 
   function getAvailableDiceDiv() {
     let dices = [...state.rawDices[0]];
-    dices.sort();
     let arr = dices.map(d => <img className="dice-small"
                                   src={"img/" + ImageMap[d]}
                                   alt="dice"/>);
