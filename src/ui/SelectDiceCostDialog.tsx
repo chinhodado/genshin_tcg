@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import React, {useState} from "react";
-import {ImageMap, LetterElementMap} from "./Enum";
-import {canSatisfyCostRequirement, getSkillCostDisplay, isBasicElement} from "./Util";
+import {ImageMap, LetterElementMap} from "../Enum";
+import {canSatisfyCostRequirement, getSkillCostDisplay, isBasicElement} from "../Util";
 
 export type SelectDiceCostDialogProps = {
   isOpen: boolean

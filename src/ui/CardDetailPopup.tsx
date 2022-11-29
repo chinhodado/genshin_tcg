@@ -1,6 +1,6 @@
-import {CardInGame} from "./App";
-import {getElementDisplay, getSkillCostDisplay} from "./Util";
-import {ElementType, WeaponType} from "./Enum";
+import {CardInGame} from "../App";
+import {getElementDisplay, getSkillCostDisplay} from "../Util";
+import {ElementType, WeaponType} from "../Enum";
 
 type CardDetailPopupProps = {
   card: CardInGame

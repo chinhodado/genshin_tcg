@@ -1,5 +1,5 @@
 import React from "react";
-import {CardInGame} from "./App";
+import {CardInGame} from "../App";
 
 type CardUIProps = {
   card: CardInGame

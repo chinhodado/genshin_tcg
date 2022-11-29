@@ -2,11 +2,11 @@ import React, {useCallback, useState} from 'react';
 import './App.css';
 import {CharacterSkillType, ElementType} from "./Enum";
 import {Card, Cards} from "./Cards";
-import CardUI from "./CardUI";
-import CardDetailPopup from "./CardDetailPopup";
+import CardUI from "./ui/CardUI";
+import CardDetailPopup from "./ui/CardDetailPopup";
 import {getSkillCostDisplay, rawDicesToTotalDices} from "./Util";
-import RollDiceDialog from "./RollDiceDialog";
-import SelectDiceCostDialog from "./SelectDiceCostDialog";
+import RollDiceDialog from "./ui/RollDiceDialog";
+import SelectDiceCostDialog from "./ui/SelectDiceCostDialog";
 
 export type CardInGame = {
   base: Card

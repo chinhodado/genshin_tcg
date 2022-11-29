@@ -1,7 +1,7 @@
 import Modal from "react-modal";
 import React, {useState} from "react";
-import {randomIntFromInterval} from "./Util";
-import {ImageMap} from "./Enum";
+import {randomIntFromInterval} from "../Util";
+import {ImageMap} from "../Enum";
 
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
