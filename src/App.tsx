@@ -81,9 +81,32 @@ function App() {
     })
   }
 
-  function confirmSelectDiceCostDialog() {
-    // TODO set state
+  function confirmSelectDiceCostDialog(selectedDices: boolean[]) {
     setSelectDiceCostDialogOpened(false);
+
+    let rawDices = state.rawDices[0];
+
+    // state.rawDices and selectedDices should have same length
+    if (rawDices.length !== selectedDices.length) {
+      alert("not same length!")
+    }
+
+    let newRawDices: number[] = [];
+
+    for (let i = 0; i < rawDices.length; i++) {
+      if (!selectedDices[i]) {
+        newRawDices.push(rawDices[i]);
+      }
+    }
+
+    let newCountArr = rawDicesToTotalDices(newRawDices);
+    setState(prevState => {
+      return {
+        ...prevState,
+        totalDices: [newCountArr],
+        rawDices: [newRawDices]
+      }
+    })
   }
 
   function cancelSelectDiceCostDialog() {

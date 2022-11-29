@@ -5,7 +5,7 @@ import {canSatisfyCostRequirement, getSkillCostDisplay, isBasicElement} from "./
 
 export type SelectDiceCostDialogProps = {
   isOpen: boolean
-  confirmFn: any
+  confirmFn: (selectedDices: boolean[]) => void
   cancelFn: any
   dices: number[]
   costString: string
@@ -23,8 +23,9 @@ const customStyles = {
 };
 
 function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
-  let [selectedDices, setSelectedDices] = useState([false, false, false, false, false, false, false, false]);
-  let [lockedDices, setLockedDices] = useState([false, false, false, false, false, false, false, false]);
+  let [selectedDices, setSelectedDices] = useState<boolean[]>([]);
+  let [lockedDices, setLockedDices] = useState<boolean[]>([]);
+
   function onOpen() {
     let initialSelectedDices = getInitialSelectedDices(props.costString, props.dices);
     setSelectedDices([...initialSelectedDices]);
@@ -88,7 +89,7 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
       cellArr.push(getDiceCell(i));
 
       if (i % 4 === 3 || i === props.dices.length - 1) {
-        rowArr.push(<tr>{cellArr}</tr>);
+        rowArr.push(<tr key={rowArr.length}>{cellArr}</tr>);
       }
     }
 
