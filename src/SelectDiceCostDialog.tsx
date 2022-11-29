@@ -62,7 +62,7 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
     })
   }
 
-  function getDiceRows(idx: number) {
+  function getDiceCell(idx: number) {
     let className = "dice-roll-box";
     if (selectedDices[idx]) {
       className += " clicked";
@@ -77,6 +77,24 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
     );
   }
 
+  function getDiceRows() {
+    let rowArr = [];
+    let cellArr = [];
+    for (let i = 0; i < props.dices.length; i++) {
+      if (i % 4 === 0) {
+        cellArr = [];
+      }
+
+      cellArr.push(getDiceCell(i));
+
+      if (i % 4 === 3 || i === props.dices.length - 1) {
+        rowArr.push(<tr>{cellArr}</tr>);
+      }
+    }
+
+    return rowArr;
+  }
+
   function getRawSelectedDices() {
     let arr = [];
     for (let i = 0; i < props.dices.length; i++) {
@@ -88,6 +106,7 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
   }
 
   let canSatisfyCost = canSatisfyCostRequirement(props.costString, getRawSelectedDices());
+  let equalCostAndSelected = selectedDices.filter(x => x).length === props.costString.length;
 
   return <Modal
     isOpen={props.isOpen}
@@ -98,16 +117,11 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
     <div>
       <table>
         <tbody>
-        <tr>
-          {[0, 1, 2, 3].map(idx => getDiceRows(idx))}
-        </tr>
-        <tr>
-          {[4, 5, 6, 7].map(idx => getDiceRows(idx))}
-        </tr>
+        {getDiceRows()}
         </tbody>
       </table>
       <div>Select dices to satisfy cost: {getSkillCostDisplay(props.costString)}</div>
-      <button onClick={() => props.confirmFn(selectedDices)} disabled={!canSatisfyCost}>Confirm</button>
+      <button onClick={() => props.confirmFn(selectedDices)} disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
       <button onClick={props.cancelFn}>Cancel</button>
     </div>
   </Modal>

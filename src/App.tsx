@@ -13,10 +13,30 @@ export type CardInGame = {
   currentHp: number
 }
 
+type AppState = {
+  totalDices: number[][]
+  rawDices: number[][]
+  activeChar: {
+    base: Card,
+    currentHp: number
+  }
+  bench1Char: {
+    base: Card,
+    currentHp: number
+  }
+  bench2Char: {
+    base: Card,
+    currentHp: number
+  }
+  isClicked: boolean
+  isHovering: boolean
+  idForCardDetail: string
+}
+
 function App() {
-  let [state, setState] = useState({
+  let [state, setState] = useState<AppState>({
     totalDices: [[0, 0, 0, 0, 0, 0, 0, 0]],
-    rawDices: [[0, 0, 0, 0, 0, 0, 0, 0]],
+    rawDices: [[]],
     activeChar: {
       base: Cards.Diluc,
       currentHp: 10
