@@ -32,14 +32,14 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
   }
 
   function getInitialSelectedDices(cost: string, rawDices: number[]) {
-    let selected = props.dices.map(x => false);
+    let selected = rawDices.map(_x => false);
     for (let i = 0; i < cost.length; i++) {
       let c = cost[i];
       let element = LetterElementMap[c];
 
       if (isBasicElement(element)) {
-        for (let j = 0; j < props.dices.length; j++) {
-          if (props.dices[j] === element && !selected[j]) {
+        for (let j = 0; j < rawDices.length; j++) {
+          if (rawDices[j] === element && !selected[j]) {
             selected[j] = true;
             break;
           }

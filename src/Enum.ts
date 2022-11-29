@@ -43,6 +43,13 @@ export type CardInDeck = {
   currentHp: number
 }
 
+export enum CharacterSkillType {
+  Normal,
+  Skill,
+  Burst,
+  Special
+}
+
 export const ImageMap: any = {
   [ElementType.Anemo]: "Element_Anemo.svg",
   [ElementType.Cryo]: "Element_Cryo.svg",

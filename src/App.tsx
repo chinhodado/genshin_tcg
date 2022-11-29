@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {ElementType} from "./Enum";
+import {CharacterSkillType, ElementType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./CardUI";
 import CardDetailPopup from "./CardDetailPopup";
@@ -152,6 +152,22 @@ function App() {
     }
   }
 
+  function doActiveCharSkill(type: CharacterSkillType) {
+    let cost = '';
+    if (type === CharacterSkillType.Normal) {
+      cost = state.activeChar.base.skills.normal.cost;
+    }
+    else if (type === CharacterSkillType.Skill) {
+      cost = state.activeChar.base.skills.skill.cost;
+    }
+    else if (type === CharacterSkillType.Burst) {
+      cost = state.activeChar.base.skills.burst.cost;
+    }
+
+    setSelectedSkillCostString(cost);
+    openSelectDiceCostDialog();
+  }
+
   return (
     <div id="main-container">
       <RollDiceDialog isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}></RollDiceDialog>
@@ -208,9 +224,9 @@ function App() {
               </thead>
               <tbody>
                 <tr>
-                  <td onClick={openSelectDiceCostDialog}>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
-                  <td>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
-                  <td>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
+                  <td onClick={() => doActiveCharSkill(CharacterSkillType.Normal)}>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
+                  <td onClick={() => doActiveCharSkill(CharacterSkillType.Skill)}>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
+                  <td onClick={() => doActiveCharSkill(CharacterSkillType.Burst)}>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
                   <td></td>
                 </tr>
               </tbody>
