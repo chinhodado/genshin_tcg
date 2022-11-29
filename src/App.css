@@ -247,3 +247,14 @@ body {
 .dice-roll-box.clicked {
   background-color: bisque;
 }
+
+.dialog-bottom-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.dialog-bottom-buttons button {
+  margin-top: 10px;
+  margin-left: 5px;
+}

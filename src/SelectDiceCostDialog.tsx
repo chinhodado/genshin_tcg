@@ -115,15 +115,18 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
     style={customStyles}
     contentLabel="Roll Dice Dialog"
   >
-    <div>
+    <div id="select-cost-dialog">
       <table>
         <tbody>
         {getDiceRows()}
         </tbody>
       </table>
       <div>Select dices to satisfy cost: {getSkillCostDisplay(props.costString)}</div>
-      <button onClick={() => props.confirmFn(selectedDices)} disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
-      <button onClick={props.cancelFn}>Cancel</button>
+
+      <div className="dialog-bottom-buttons">
+        <button onClick={() => props.confirmFn(selectedDices)} disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
+        <button onClick={props.cancelFn}>Cancel</button>
+      </div>
     </div>
   </Modal>
 }

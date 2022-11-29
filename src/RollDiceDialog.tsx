@@ -98,8 +98,11 @@ function RollDiceDialog(props: RollDiceDialogProps) {
         </tbody>
       </table>
       <div>Select one or more dices to re-roll them (once)</div>
-      <button onClick={rerollDice} disabled={rerollDone || !atLeastOneDiceSelected()}>Reroll</button>
-      <button onClick={() => props.closeModal(diceValues)}>Done</button>
+
+      <div className="dialog-bottom-buttons">
+        <button onClick={rerollDice} disabled={rerollDone || !atLeastOneDiceSelected()}>Reroll</button>
+        <button onClick={() => props.closeModal(diceValues)}>Done</button>
+      </div>
     </div>
   </Modal>
 }
