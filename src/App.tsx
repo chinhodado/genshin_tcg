@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {CharacterSkillType, ElementType} from "./Enum";
+import {CharacterSkillType, ImageMap} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
@@ -117,8 +117,6 @@ function App() {
     openRollDiceDialog();
   }, []);
 
-  let playerDices = state.totalDices[0];
-
   function switchActiveChar(charPos: number) {
     setState(prevState => {
       let oldActiveChar = prevState.activeChar;
@@ -191,6 +189,16 @@ function App() {
     openSelectDiceCostDialog();
   }
 
+  function getAvailableDiceDiv() {
+    let dices = [...state.rawDices[0]];
+    dices.sort();
+    let arr = dices.map(d => <img className="dice-small"
+                                  src={"img/" + ImageMap[d]}
+                                  alt="dice"/>);
+
+    return <div>Available dices: <br/><br/>{arr}</div>
+  }
+
   return (
     <div id="main-container">
       <RollDiceDialog isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}></RollDiceDialog>
@@ -215,22 +223,7 @@ function App() {
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
 
           <div id="dice-1">
-            <table id="dice-table-1">
-              <tbody>
-                <tr>
-                  <td><div id="dice-pyro-1" className="dice pyro">Pyro: {playerDices[ElementType.Pyro]}</div></td>
-                  <td><div id="dice-cryo-1" className="dice cryo">Cryo: {playerDices[ElementType.Cryo]}</div></td>
-                  <td><div id="dice-hydro-1" className="dice hydro">Hydro: {playerDices[ElementType.Hydro]}</div></td>
-                  <td><div id="dice-electro-1" className="dice electro">Electro: {playerDices[ElementType.Electro]}</div></td>
-                </tr>
-                <tr>
-                  <td><div id="dice-geo-1" className="dice geo">Geo: {playerDices[ElementType.Geo]}</div></td>
-                  <td><div id="dice-anemo-1" className="dice anemo">Anemo: {playerDices[ElementType.Anemo]}</div></td>
-                  <td><div id="dice-dendro-1" className="dice dendro">Dendro: {playerDices[ElementType.Dendro]}</div></td>
-                  <td><div id="dice-omni-1" className="dice omni">Omni: {playerDices[ElementType.Omni]}</div></td>
-                </tr>
-              </tbody>
-            </table>
+            {getAvailableDiceDiv()}
           </div>
           <div id="active-char-1-skills">
             <div id="active-char-1-skills-label">
