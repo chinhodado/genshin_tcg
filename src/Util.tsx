@@ -107,3 +107,17 @@ export function canSatisfyCostRequirement(cost: string, rawDices: number[]) {
   let leftoverSum = totalDices.reduce((a, b) => a + b, 0);
   return leftoverSum >= blackCount;
 }
+
+// @ts-ignore
+window.printDuplicateIds = function() {
+  return Object.entries(
+    [...document.querySelectorAll("[id]")]
+      .map((x) => x.id) /* get all ids */
+      .reduce(
+        // @ts-ignore
+        (acc, id) => ({ ...acc, [id]: (acc[id] || 0) + 1 }),
+        {}
+      ) /*count them*/
+    // @ts-ignore
+  ).filter(([_key, val]) => val > 1); /* find the ones repeating more than once */
+}
