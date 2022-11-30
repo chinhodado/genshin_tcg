@@ -19,7 +19,8 @@ const customStyles = {
 
 export type RollDiceDialogProps = {
   isOpen: boolean
-  closeModal: any
+  closeModal: (player: number, diceValues: number[]) => void
+  player: number
 }
 
 function RollDiceDialog(props: RollDiceDialogProps) {
@@ -101,7 +102,7 @@ function RollDiceDialog(props: RollDiceDialogProps) {
 
       <div className="dialog-bottom-buttons">
         <button onClick={rerollDice} disabled={rerollDone || !atLeastOneDiceSelected()}>Reroll</button>
-        <button onClick={() => props.closeModal(diceValues)}>Done</button>
+        <button onClick={() => props.closeModal(props.player, diceValues)}>Done</button>
       </div>
     </div>
   </Modal>

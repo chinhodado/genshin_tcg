@@ -1,10 +1,10 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {CharacterSkillType, ImageMap} from "./Enum";
+import {CharacterSkillType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
-import {getSkillCostDisplay, rawDicesToTotalDices} from "./Util";
+import {rawDicesToTotalDices} from "./Util";
 import RollDiceDialog from "./ui/RollDiceDialog";
 import SelectDiceCostDialog from "./ui/SelectDiceCostDialog";
 import AvailableDiceUI from "./ui/AvailableDiceUI";
@@ -38,8 +38,8 @@ type AppState = {
 
 function App() {
   let [state, setState] = useState<AppState>({
-    totalDices: [[0, 0, 0, 0, 0, 0, 0, 0]],
-    rawDices: [[]],
+    totalDices: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
+    rawDices: [[], []],
     activeChar: {
       base: Cards.Diluc,
       currentHp: 10
@@ -60,9 +60,10 @@ function App() {
     isHovering: false,
     idForCardDetail: ''
   });
-  const [isRollDiceDialogOpened, setRollDiceDialogOpened] = React.useState(false);
-  const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = React.useState(false);
-  const [selectedSkillCostString, setSelectedSkillCostString] = React.useState("PP");
+  const [isRollDiceDialogOpened, setRollDiceDialogOpened] = React.useState<boolean>(false);
+  const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = React.useState<boolean>(false);
+  const [selectedSkillCostString, setSelectedSkillCostString] = React.useState<string>("");
+  const [currentPlayer, setCurrentPlayer] = React.useState<number>(0);
 
   function openRollDiceDialog() {
     setRollDiceDialogOpened(true);
@@ -72,16 +73,28 @@ function App() {
     setSelectDiceCostDialogOpened(true);
   }
 
-  function closeRollDiceDialog(result: number[]) {
+  function closeRollDiceDialog(player: number, result: number[]) {
     setRollDiceDialogOpened(false);
     let newCountArr = rawDicesToTotalDices(result);
-    setState(prevState => {
-      return {
-        ...prevState,
-        totalDices: [newCountArr],
-        rawDices: [result.sort()]
-      }
-    })
+
+    if (player === 0) {
+      setState(prevState => {
+        return {
+          ...prevState,
+          totalDices: [newCountArr, prevState.totalDices[1]],
+          rawDices: [result.sort(), prevState.rawDices[1]]
+        }
+      })
+    }
+    else {
+      setState(prevState => {
+        return {
+          ...prevState,
+          totalDices: [prevState.totalDices[0], newCountArr],
+          rawDices: [prevState.rawDices[0], result.sort()]
+        }
+      })
+    }
   }
 
   function confirmSelectDiceCostDialog(selectedDices: boolean[]) {
@@ -116,7 +129,8 @@ function App() {
     setSelectDiceCostDialogOpened(false);
   }
 
-  let rollDiceCallback = useCallback((_e: React.MouseEvent) => {
+  let rollDiceCallback = useCallback((player: number) => {
+    setCurrentPlayer(player);
     openRollDiceDialog();
   }, []);
 
@@ -194,7 +208,7 @@ function App() {
 
   return (
     <div id="main-container">
-      <RollDiceDialog isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}/>
+      <RollDiceDialog player={currentPlayer} isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}/>
       <SelectDiceCostDialog isOpen={isSelectDiceCostDialogOpened}
                             confirmFn={confirmSelectDiceCostDialog}
                             cancelFn={cancelSelectDiceCostDialog}
@@ -213,9 +227,9 @@ function App() {
           <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-2" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
 
-          <AvailableDiceUI id="available-dice-2" rawDices={state.rawDices[0]}/>
+          <AvailableDiceUI id="available-dice-2" rawDices={state.rawDices[1]}/>
           <ActiveCharSkillTable id="active-char-2-skills" char={state.activeChar.base} doActiveCharSkill={doActiveCharSkill}/>
-          <ActionBoxUI id="action-box-2" onRollDiceClicked={rollDiceCallback}/>
+          <ActionBoxUI id="action-box-2" player={1} onRollDiceClicked={rollDiceCallback}/>
         </div>
 
         <div id="bottom-field">
@@ -229,7 +243,7 @@ function App() {
 
           <AvailableDiceUI id="available-dice-1" rawDices={state.rawDices[0]}/>
           <ActiveCharSkillTable id="active-char-2-skills" char={state.activeChar.base} doActiveCharSkill={doActiveCharSkill}/>
-          <ActionBoxUI id="action-box-1" onRollDiceClicked={rollDiceCallback}/>
+          <ActionBoxUI id="action-box-1" player={0} onRollDiceClicked={rollDiceCallback}/>
         </div>
       </div>
     </div>
