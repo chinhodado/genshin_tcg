@@ -114,7 +114,7 @@ body {
   position: relative;
 }
 
-#dice-1 {
+#available-dice-1, #available-dice-2 {
   /*border: 1px solid black;*/
   right: 3%;
   top: 5%;
@@ -123,7 +123,7 @@ body {
   position: absolute;
 }
 
-#active-char-1-skills {
+#active-char-1-skills, #active-char-2-skills {
   border: 1px solid black;
   right: 1%;
   bottom: 1%;
@@ -132,17 +132,17 @@ body {
   position: absolute;
 }
 
-#active-char-1-skills-label {
+.active-char-skills-label {
   background-color: bisque;
   text-align: center;
 }
 
-#active-char-1-skills-table {
+.active-char-skills-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-#active-char-1-skills-table td {
+.active-char-skills-table td {
   border: 1px solid black;
   border-collapse: collapse;
 }
@@ -152,12 +152,17 @@ body {
   top: 5%;
 }
 
-#bench1-char-1 {
+#active-char-2 {
+  right: 50%;
+  bottom: 5%;
+}
+
+#bench1-char-1, #bench1-char-2 {
   right: 35%;
   top: 35%;
 }
 
-#bench2-char-1 {
+#bench2-char-1, #bench2-char-2 {
   right: 60%;
   top: 35%;
 }
@@ -169,13 +174,21 @@ body {
   position: absolute;
 }
 
-#action-box-1 {
+#action-box-1, #action-box-2 {
   border: 1px solid black;
-  left: 3%;
-  top: 5%;
   width: 90px;
   height: 120px;
   position: absolute;
+}
+
+#action-box-1 {
+  left: 3%;
+  top: 5%;
+}
+
+#action-box-2 {
+  left: 3%;
+  top: 15%;
 }
 
 .card {

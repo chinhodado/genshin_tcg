@@ -191,9 +191,10 @@ function App() {
 
   function getAvailableDiceDiv() {
     let dices = [...state.rawDices[0]];
+    let i = 0;
     let arr = dices.map(d => <img className="dice-small"
                                   src={"img/" + ImageMap[d]}
-                                  alt="dice"/>);
+                                  alt="dice" key={i++}/>);
 
     return <div>Available dices: <br/><br/>{arr}</div>
   }
@@ -211,6 +212,42 @@ function App() {
       <div id="right-panel">
         <div id="top-field">
           <div id="player2-info"><h3>Player 2</h3></div>
+          <CardUI card={state.activeChar} charPosition={0} id="active-char-2"
+                  onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
+          <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-2" onCharSwitch={switchActiveChar}
+                  onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
+          <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-2" onCharSwitch={switchActiveChar}
+                  onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
+
+          <div id="available-dice-2">
+            {getAvailableDiceDiv()}
+          </div>
+          <div id="active-char-2-skills">
+            <div className="active-char-skills-label">
+              Skills
+            </div>
+            <table className="active-char-skills-table">
+              <thead>
+              <tr>
+                <td>Normal</td>
+                <td>Skill</td>
+                <td>Burst</td>
+                <td>Special</td>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td onClick={() => doActiveCharSkill(CharacterSkillType.Normal)}>{getSkillCostDisplay(state.activeChar.base.skills.normal.cost)}</td>
+                <td onClick={() => doActiveCharSkill(CharacterSkillType.Skill)}>{getSkillCostDisplay(state.activeChar.base.skills.skill.cost)}</td>
+                <td onClick={() => doActiveCharSkill(CharacterSkillType.Burst)}>{getSkillCostDisplay(state.activeChar.base.skills.burst.cost)} + ({state.activeChar.base.skills.burst.energy}E)</td>
+                <td></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="action-box-2">
+            <input type="button" value="Roll dice" onClick={rollDiceCallback}/>
+          </div>
         </div>
         <div id="bottom-field">
           <div id="player1-info"><h3>Player 1</h3></div>
@@ -221,14 +258,14 @@ function App() {
           <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
 
-          <div id="dice-1">
+          <div id="available-dice-1">
             {getAvailableDiceDiv()}
           </div>
           <div id="active-char-1-skills">
-            <div id="active-char-1-skills-label">
+            <div className="active-char-skills-label">
               Skills
             </div>
-            <table id="active-char-1-skills-table">
+            <table className="active-char-skills-table">
               <thead>
                 <tr>
                   <td>Normal</td>
