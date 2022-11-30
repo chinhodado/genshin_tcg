@@ -7,6 +7,7 @@ import CardDetailPopup from "./ui/CardDetailPopup";
 import {getSkillCostDisplay, rawDicesToTotalDices} from "./Util";
 import RollDiceDialog from "./ui/RollDiceDialog";
 import SelectDiceCostDialog from "./ui/SelectDiceCostDialog";
+import AvailableDiceUI from "./ui/AvailableDiceUI";
 
 export type CardInGame = {
   base: Card
@@ -189,16 +190,6 @@ function App() {
     openSelectDiceCostDialog();
   }
 
-  function getAvailableDiceDiv() {
-    let dices = [...state.rawDices[0]];
-    let i = 0;
-    let arr = dices.map(d => <img className="dice-small"
-                                  src={"img/" + ImageMap[d]}
-                                  alt="dice" key={i++}/>);
-
-    return <div>Available dices: <br/><br/>{arr}</div>
-  }
-
   return (
     <div id="main-container">
       <RollDiceDialog isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}></RollDiceDialog>
@@ -219,9 +210,8 @@ function App() {
           <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-2" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
 
-          <div id="available-dice-2">
-            {getAvailableDiceDiv()}
-          </div>
+          <AvailableDiceUI id="available-dice-2" rawDices={state.rawDices[0]}></AvailableDiceUI>
+
           <div id="active-char-2-skills">
             <div className="active-char-skills-label">
               Skills
@@ -258,9 +248,7 @@ function App() {
           <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}></CardUI>
 
-          <div id="available-dice-1">
-            {getAvailableDiceDiv()}
-          </div>
+          <AvailableDiceUI id="available-dice-1" rawDices={state.rawDices[0]}></AvailableDiceUI>
           <div id="active-char-1-skills">
             <div className="active-char-skills-label">
               Skills
