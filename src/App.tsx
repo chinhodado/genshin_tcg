@@ -9,6 +9,7 @@ import RollDiceDialog from "./ui/RollDiceDialog";
 import SelectDiceCostDialog from "./ui/SelectDiceCostDialog";
 import AvailableDiceUI from "./ui/AvailableDiceUI";
 import ActiveCharSkillTable from "./ui/ActiveCharSkillTable";
+import ActionBoxUI from "./ui/ActionBoxUI";
 
 export type CardInGame = {
   base: Card
@@ -213,11 +214,8 @@ function App() {
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
 
           <AvailableDiceUI id="available-dice-2" rawDices={state.rawDices[0]}/>
-
           <ActiveCharSkillTable id="active-char-2-skills" char={state.activeChar.base} doActiveCharSkill={doActiveCharSkill}/>
-          <div id="action-box-2">
-            <input type="button" value="Roll dice" onClick={rollDiceCallback}/>
-          </div>
+          <ActionBoxUI id="action-box-2" onRollDiceClicked={rollDiceCallback}/>
         </div>
 
         <div id="bottom-field">
@@ -231,9 +229,7 @@ function App() {
 
           <AvailableDiceUI id="available-dice-1" rawDices={state.rawDices[0]}/>
           <ActiveCharSkillTable id="active-char-2-skills" char={state.activeChar.base} doActiveCharSkill={doActiveCharSkill}/>
-          <div id="action-box-1">
-            <input type="button" value="Roll dice" onClick={rollDiceCallback}/>
-          </div>
+          <ActionBoxUI id="action-box-1" onRollDiceClicked={rollDiceCallback}/>
         </div>
       </div>
     </div>
