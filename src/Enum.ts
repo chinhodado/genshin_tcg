@@ -58,5 +58,5 @@ export const ImageMap: any = {
   [ElementType.Dendro]: "Element_Dendro.svg",
   [ElementType.Hydro]: "Element_Hydro.svg",
   [ElementType.Pyro]: "Element_Pyro.svg",
-  [ElementType.Omni]: "Icon_CD_Carefree_Coin.webp"
+  [ElementType.Omni]: "Omni.svg"
 }
