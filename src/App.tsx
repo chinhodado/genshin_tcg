@@ -10,6 +10,7 @@ import SelectDiceCostDialog from "./ui/SelectDiceCostDialog";
 import AvailableDiceUI from "./ui/AvailableDiceUI";
 import ActiveCharSkillTable from "./ui/ActiveCharSkillTable";
 import ActionBoxUI from "./ui/ActionBoxUI";
+import {useImmer} from "use-immer";
 
 export type CardInGame = {
   base: Card
@@ -37,7 +38,7 @@ type AppState = {
 }
 
 function App() {
-  let [state, setState] = useState<AppState>({
+  let [state, setState] = useImmer<AppState>({
     totalDices: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
     rawDices: [[], []],
     activeChar: {
@@ -60,10 +61,10 @@ function App() {
     isHovering: false,
     idForCardDetail: ''
   });
-  const [isRollDiceDialogOpened, setRollDiceDialogOpened] = React.useState<boolean>(false);
-  const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = React.useState<boolean>(false);
-  const [selectedSkillCostString, setSelectedSkillCostString] = React.useState<string>("");
-  const [currentPlayer, setCurrentPlayer] = React.useState<number>(0);
+  const [isRollDiceDialogOpened, setRollDiceDialogOpened] = useState<boolean>(false);
+  const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = useState<boolean>(false);
+  const [selectedSkillCostString, setSelectedSkillCostString] = useState<string>("");
+  const [currentPlayer, setCurrentPlayer] = useState<number>(0);
 
   function openRollDiceDialog() {
     setRollDiceDialogOpened(true);
@@ -76,25 +77,12 @@ function App() {
   function closeRollDiceDialog(player: number, result: number[]) {
     setRollDiceDialogOpened(false);
     let newCountArr = rawDicesToTotalDices(result);
+    let sortedRawDices = result.sort();
 
-    if (player === 0) {
-      setState(prevState => {
-        return {
-          ...prevState,
-          totalDices: [newCountArr, prevState.totalDices[1]],
-          rawDices: [result.sort(), prevState.rawDices[1]]
-        }
-      })
-    }
-    else {
-      setState(prevState => {
-        return {
-          ...prevState,
-          totalDices: [prevState.totalDices[0], newCountArr],
-          rawDices: [prevState.rawDices[0], result.sort()]
-        }
-      })
-    }
+    setState(draft => {
+      draft.totalDices[player] = newCountArr;
+      draft.rawDices[player] = sortedRawDices;
+    })
   }
 
   function confirmSelectDiceCostDialog(selectedDices: boolean[]) {
