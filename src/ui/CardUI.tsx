@@ -5,7 +5,8 @@ type CardUIProps = {
   card: CardInGame
   charPosition: number
   id: string
-  onCharSwitch?: (charPos: number) => void
+  player: number
+  onCharSwitch?: (player: number, charPos: number) => void
   onMouseEnter: any
   onMouseLeave: any
 }
@@ -14,7 +15,7 @@ function CardUI(props: CardUIProps) {
   let imgPath = "img/cards/" + props.card.base.img + ".webp";
 
   function switchChar() {
-    props.onCharSwitch && props.onCharSwitch(props.charPosition);
+    props.onCharSwitch && props.onCharSwitch(props.player, props.charPosition);
   }
 
   return (

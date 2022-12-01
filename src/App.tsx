@@ -23,15 +23,15 @@ type AppState = {
   activeChar: {
     base: Card,
     currentHp: number
-  }
+  }[]
   bench1Char: {
     base: Card,
     currentHp: number
-  }
+  }[]
   bench2Char: {
     base: Card,
     currentHp: number
-  }
+  }[]
   isClicked: boolean
   isHovering: boolean
   idForCardDetail: string
@@ -41,18 +41,27 @@ function App() {
   let [state, setState] = useImmer<AppState>({
     totalDices: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
     rawDices: [[], []],
-    activeChar: {
+    activeChar: [{
       base: Cards.Diluc,
       currentHp: 10
-    },
-    bench1Char: {
+    }, {
+      base: Cards.Diluc,
+      currentHp: 10
+    }],
+    bench1Char: [{
       base: Cards.Ganyu,
       currentHp: 10
-    },
-    bench2Char: {
+    }, {
+      base: Cards.Ganyu,
+      currentHp: 10
+    }],
+    bench2Char: [{
       base: Cards.Xingqiu,
       currentHp: 10
-    },
+    }, {
+      base: Cards.Xingqiu,
+      currentHp: 10
+    }],
 
     // For displaying the card detail popup
     // TODO isClicked not used right now, may want to add handle for that later
@@ -85,10 +94,10 @@ function App() {
     })
   }
 
-  function confirmSelectDiceCostDialog(selectedDices: boolean[]) {
+  function confirmSelectDiceCostDialog(player: number, selectedDices: boolean[]) {
     setSelectDiceCostDialogOpened(false);
 
-    let rawDices = state.rawDices[0];
+    let rawDices = state.rawDices[player];
 
     // state.rawDices and selectedDices should have same length
     if (rawDices.length !== selectedDices.length) {
@@ -104,12 +113,9 @@ function App() {
     }
 
     let newCountArr = rawDicesToTotalDices(newRawDices);
-    setState(prevState => {
-      return {
-        ...prevState,
-        totalDices: [newCountArr],
-        rawDices: [newRawDices]
-      }
+    setState(draft => {
+        draft.totalDices[player] = newCountArr;
+        draft.rawDices[player] = newRawDices;
     })
   }
 
@@ -122,24 +128,19 @@ function App() {
     openRollDiceDialog();
   }, []);
 
-  function switchActiveChar(charPos: number) {
-    setState(prevState => {
-      let oldActiveChar = prevState.activeChar;
-      let oldBenchChar = charPos === 1? prevState.bench1Char : prevState.bench2Char;
+  function switchActiveChar(player: number, charPos: number) {
+    setState(draft => {
+      let oldActiveChar = draft.activeChar[player];
+      let oldBenchChar = charPos === 1? draft.bench1Char[player] : draft.bench2Char[player];
 
-      let newState = {
-        ...prevState,
-        activeChar: oldBenchChar,
-      }
+      draft.activeChar[player] = oldBenchChar;
 
       if (charPos === 1) {
-        newState.bench1Char = oldActiveChar;
+        draft.bench1Char[player] = oldActiveChar;
       }
       else {
-        newState.bench2Char = oldActiveChar;
+        draft.bench2Char[player] = oldActiveChar;
       }
-
-      return newState;
     })
   }
 
@@ -148,11 +149,10 @@ function App() {
       return;
     }
 
-    setState(prevState => ({
-      ...prevState,
-      isHovering: true,
-      idForCardDetail: event.target.id
-    }));
+    setState(draft => {
+      draft.isHovering = true;
+      draft.idForCardDetail = event.target.id;
+    });
   }
 
   function onMouseLeave(_event: any) {
@@ -160,47 +160,53 @@ function App() {
       return;
     }
 
-    setState(prevState => ({
-      ...prevState,
-      isHovering: false,
-    }));
+    setState(draft => {
+      draft.isHovering = false;
+    });
   }
 
   function getCardByUiId(id: string) {
-    if (id === 'active-char-1-img') {
-      return state.activeChar;
-    }
-    else if (id === 'bench1-char-1-img') {
-      return state.bench1Char;
-    }
-    else /*if (pos === 2)*/ {
-      return state.bench2Char;
+    switch (id) {
+      case 'active-char-1-img':
+        return state.activeChar[0];
+      case 'bench1-char-1-img':
+        return state.bench1Char[0];
+      case 'bench2-char-1-img':
+        return state.bench2Char[0];
+      case 'active-char-2-img':
+        return state.activeChar[1];
+      case 'bench1-char-2-img':
+        return state.bench1Char[1];
+      default: // bench2-char-2-img
+        return state.bench2Char[1];
     }
   }
 
-  function doActiveCharSkill(type: CharacterSkillType) {
+  function doActiveCharSkill(player: number, type: CharacterSkillType) {
     let cost = '';
     if (type === CharacterSkillType.Normal) {
-      cost = state.activeChar.base.skills.normal.cost;
+      cost = state.activeChar[player].base.skills.normal.cost;
     }
     else if (type === CharacterSkillType.Skill) {
-      cost = state.activeChar.base.skills.skill.cost;
+      cost = state.activeChar[player].base.skills.skill.cost;
     }
     else if (type === CharacterSkillType.Burst) {
-      cost = state.activeChar.base.skills.burst.cost;
+      cost = state.activeChar[player].base.skills.burst.cost;
     }
 
     setSelectedSkillCostString(cost);
+    setCurrentPlayer(player);
     openSelectDiceCostDialog();
   }
 
   return (
     <div id="main-container">
       <RollDiceDialog player={currentPlayer} isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}/>
-      <SelectDiceCostDialog isOpen={isSelectDiceCostDialogOpened}
+      <SelectDiceCostDialog player={currentPlayer}
+                            isOpen={isSelectDiceCostDialogOpened}
                             confirmFn={confirmSelectDiceCostDialog}
                             cancelFn={cancelSelectDiceCostDialog}
-                            dices={state.rawDices[0]}
+                            dices={state.rawDices[currentPlayer]}
                             costString={selectedSkillCostString}/>
       {(state.isHovering || state.isClicked) && <CardDetailPopup card={getCardByUiId(state.idForCardDetail)}/>}
       <div id="left-panel">Event log</div>
@@ -208,29 +214,29 @@ function App() {
       <div id="right-panel">
         <div id="top-field">
           <div id="player2-info"><h3>Player 2</h3></div>
-          <CardUI card={state.activeChar} charPosition={0} id="active-char-2"
+          <CardUI player={1} card={state.activeChar[1]} charPosition={0} id="active-char-2"
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
-          <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-2" onCharSwitch={switchActiveChar}
+          <CardUI player={1} card={state.bench1Char[1]} charPosition={1} id="bench1-char-2" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
-          <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-2" onCharSwitch={switchActiveChar}
+          <CardUI player={1} card={state.bench2Char[1]} charPosition={2} id="bench2-char-2" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
 
           <AvailableDiceUI id="available-dice-2" rawDices={state.rawDices[1]}/>
-          <ActiveCharSkillTable id="active-char-2-skills" char={state.activeChar.base} doActiveCharSkill={doActiveCharSkill}/>
+          <ActiveCharSkillTable player={1} id="active-char-2-skills" char={state.activeChar[1].base} doActiveCharSkill={doActiveCharSkill}/>
           <ActionBoxUI id="action-box-2" player={1} onRollDiceClicked={rollDiceCallback}/>
         </div>
 
         <div id="bottom-field">
           <div id="player1-info"><h3>Player 1</h3></div>
-          <CardUI card={state.activeChar} charPosition={0} id="active-char-1"
+          <CardUI player={0} card={state.activeChar[0]} charPosition={0} id="active-char-1"
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
-          <CardUI card={state.bench1Char} charPosition={1} id="bench1-char-1" onCharSwitch={switchActiveChar}
+          <CardUI player={0} card={state.bench1Char[0]} charPosition={1} id="bench1-char-1" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
-          <CardUI card={state.bench2Char} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}
+          <CardUI player={0} card={state.bench2Char[0]} charPosition={2} id="bench2-char-1" onCharSwitch={switchActiveChar}
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
 
           <AvailableDiceUI id="available-dice-1" rawDices={state.rawDices[0]}/>
-          <ActiveCharSkillTable id="active-char-2-skills" char={state.activeChar.base} doActiveCharSkill={doActiveCharSkill}/>
+          <ActiveCharSkillTable player={0} id="active-char-1-skills" char={state.activeChar[0].base} doActiveCharSkill={doActiveCharSkill}/>
           <ActionBoxUI id="action-box-1" player={0} onRollDiceClicked={rollDiceCallback}/>
         </div>
       </div>

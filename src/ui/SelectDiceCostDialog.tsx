@@ -5,7 +5,8 @@ import {canSatisfyCostRequirement, getSkillCostDisplay, isBasicElement} from "..
 
 export type SelectDiceCostDialogProps = {
   isOpen: boolean
-  confirmFn: (selectedDices: boolean[]) => void
+  player: number
+  confirmFn: (player: number, selectedDices: boolean[]) => void
   cancelFn: any
   dices: number[]
   costString: string
@@ -124,7 +125,7 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
       <div>Select dices to satisfy cost: {getSkillCostDisplay(props.costString)}</div>
 
       <div className="dialog-bottom-buttons">
-        <button onClick={() => props.confirmFn(selectedDices)} disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
+        <button onClick={() => props.confirmFn(props.player, selectedDices)} disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
         <button onClick={props.cancelFn}>Cancel</button>
       </div>
     </div>

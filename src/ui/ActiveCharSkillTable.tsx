@@ -6,7 +6,8 @@ import {Card} from "../Cards";
 export type ActiveCharSkillTableProps = {
   id: string
   char: Card
-  doActiveCharSkill: (type: CharacterSkillType) => void
+  player: number
+  doActiveCharSkill: (player: number, type: CharacterSkillType) => void
 }
 
 function ActiveCharSkillTable(props: ActiveCharSkillTableProps) {
@@ -26,13 +27,13 @@ function ActiveCharSkillTable(props: ActiveCharSkillTableProps) {
         </thead>
         <tbody>
         <tr>
-          <td onClick={() => props.doActiveCharSkill(CharacterSkillType.Normal)}>
+          <td onClick={() => props.doActiveCharSkill(props.player, CharacterSkillType.Normal)}>
             {getSkillCostDisplay(props.char.skills.normal.cost)}
           </td>
-          <td onClick={() => props.doActiveCharSkill(CharacterSkillType.Skill)}>
+          <td onClick={() => props.doActiveCharSkill(props.player, CharacterSkillType.Skill)}>
             {getSkillCostDisplay(props.char.skills.skill.cost)}
           </td>
-          <td onClick={() => props.doActiveCharSkill(CharacterSkillType.Burst)}>
+          <td onClick={() => props.doActiveCharSkill(props.player, CharacterSkillType.Burst)}>
             {getSkillCostDisplay(props.char.skills.burst.cost)} + ({props.char.skills.burst.energy}E)
           </td>
           <td></td>
