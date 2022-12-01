@@ -15,23 +15,15 @@ import {useImmer} from "use-immer";
 export type CardInGame = {
   base: Card
   currentHp: number
+  currentEnergy: number
 }
 
 type AppState = {
   totalDices: number[][]
   rawDices: number[][]
-  activeChar: {
-    base: Card,
-    currentHp: number
-  }[]
-  bench1Char: {
-    base: Card,
-    currentHp: number
-  }[]
-  bench2Char: {
-    base: Card,
-    currentHp: number
-  }[]
+  activeChar: CardInGame[]
+  bench1Char: CardInGame[]
+  bench2Char: CardInGame[]
   isClicked: boolean
   isHovering: boolean
   idForCardDetail: string
@@ -43,24 +35,30 @@ function App() {
     rawDices: [[], []],
     activeChar: [{
       base: Cards.Diluc,
-      currentHp: 10
+      currentHp: 10,
+      currentEnergy: 0
     }, {
       base: Cards.Diluc,
-      currentHp: 10
+      currentHp: 10,
+      currentEnergy: 0
     }],
     bench1Char: [{
       base: Cards.Ganyu,
-      currentHp: 10
+      currentHp: 10,
+      currentEnergy: 0
     }, {
       base: Cards.Ganyu,
-      currentHp: 10
+      currentHp: 10,
+      currentEnergy: 0
     }],
     bench2Char: [{
       base: Cards.Xingqiu,
-      currentHp: 10
+      currentHp: 10,
+      currentEnergy: 0
     }, {
       base: Cards.Xingqiu,
-      currentHp: 10
+      currentHp: 10,
+      currentEnergy: 0
     }],
 
     // For displaying the card detail popup

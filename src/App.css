@@ -281,3 +281,21 @@ body {
   line-height: 40px;
   font-size: 16px;
 }
+
+.card-energy {
+  position: absolute;
+  right: -10px;
+}
+
+.energy-dot {
+  border: 1px solid grey;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  z-index: 1;
+  background: white;
+}
+
+.energy-dot.filled {
+  background-color: #fff2b9;
+}
