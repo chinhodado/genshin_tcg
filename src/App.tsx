@@ -72,6 +72,8 @@ function App() {
   const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = useState<boolean>(false);
   const [selectedSkillCostString, setSelectedSkillCostString] = useState<string>("");
   const [currentPlayer, setCurrentPlayer] = useState<number>(0);
+  const [currentActiveCard, setCurrentActiveCard] = useState<CardInGame>(state.activeChar[0]);
+  const [currentSkillType, setCurrentSkillType] = useState<CharacterSkillType>(CharacterSkillType.Normal);
 
   function openRollDiceDialog() {
     setRollDiceDialogOpened(true);
@@ -92,7 +94,7 @@ function App() {
     })
   }
 
-  function confirmSelectDiceCostDialog(player: number, selectedDices: boolean[]) {
+  function confirmSelectDiceCostDialog(player: number, card: CardInGame, skillType: CharacterSkillType, selectedDices: boolean[]) {
     setSelectDiceCostDialogOpened(false);
 
     let rawDices = state.rawDices[player];
@@ -114,6 +116,28 @@ function App() {
     setState(draft => {
         draft.totalDices[player] = newCountArr;
         draft.rawDices[player] = newRawDices;
+    })
+
+    performSkill(player, card, skillType);
+  }
+
+  function performSkill(player: number, card: CardInGame, skillType: CharacterSkillType) {
+    let targetPlayer = player === 0? 1 : 0;
+    let target = state.activeChar[targetPlayer];
+
+    let dmg = 0;
+    let energyToGain = 0;
+    if (skillType === CharacterSkillType.Normal) {
+      dmg = card.base.skills.normal.dmg;
+      energyToGain += 1;
+    }
+
+    let newTargetHp = target.currentHp - dmg;
+    let newSourceEnergy = card.currentEnergy + energyToGain;
+
+    setState(draft => {
+      draft.activeChar[targetPlayer].currentHp = newTargetHp;
+      draft.activeChar[player].currentEnergy = newSourceEnergy;
     })
   }
 
@@ -194,6 +218,8 @@ function App() {
 
     setSelectedSkillCostString(cost);
     setCurrentPlayer(player);
+    setCurrentActiveCard(state.activeChar[player]);
+    setCurrentSkillType(type);
     openSelectDiceCostDialog();
   }
 
@@ -202,6 +228,8 @@ function App() {
       <RollDiceDialog player={currentPlayer} isOpen={isRollDiceDialogOpened} closeModal={closeRollDiceDialog}/>
       <SelectDiceCostDialog player={currentPlayer}
                             isOpen={isSelectDiceCostDialogOpened}
+                            card={currentActiveCard}
+                            skillType={currentSkillType}
                             confirmFn={confirmSelectDiceCostDialog}
                             cancelFn={cancelSelectDiceCostDialog}
                             dices={state.rawDices[currentPlayer]}

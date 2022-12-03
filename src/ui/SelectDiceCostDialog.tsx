@@ -1,12 +1,15 @@
 import Modal from "react-modal";
 import React, {useState} from "react";
-import {ImageMap, LetterElementMap} from "../Enum";
+import {CharacterSkillType, ImageMap, LetterElementMap} from "../Enum";
 import {canSatisfyCostRequirement, getSkillCostDisplay, isBasicElement} from "../Util";
+import {CardInGame} from "../App";
 
 export type SelectDiceCostDialogProps = {
   isOpen: boolean
   player: number
-  confirmFn: (player: number, selectedDices: boolean[]) => void
+  card: CardInGame
+  skillType: CharacterSkillType
+  confirmFn: (player: number, card: CardInGame, skillType: CharacterSkillType, selectedDices: boolean[]) => void
   cancelFn: any
   dices: number[]
   costString: string
@@ -128,7 +131,8 @@ function SelectDiceCostDialog(props: SelectDiceCostDialogProps) {
       <div>Select dices to satisfy cost: {getSkillCostDisplay(props.costString)}</div>
 
       <div className="dialog-bottom-buttons">
-        <button onClick={() => props.confirmFn(props.player, selectedDices)} disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
+        <button onClick={() => props.confirmFn(props.player, props.card, props.skillType, selectedDices)}
+                disabled={!canSatisfyCost || !equalCostAndSelected}>Confirm</button>
         <button onClick={props.cancelFn}>Cancel</button>
       </div>
     </div>
