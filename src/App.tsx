@@ -4,7 +4,6 @@ import {CharacterSkillType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
-import {rawDicesToTotalDices} from "./Util";
 import RollDiceDialog from "./ui/RollDiceDialog";
 import SelectDiceCostDialog from "./ui/SelectDiceCostDialog";
 import AvailableDiceUI from "./ui/AvailableDiceUI";
@@ -19,19 +18,14 @@ export type CardInGame = {
 }
 
 type AppState = {
-  totalDices: number[][]
   rawDices: number[][]
   activeChar: CardInGame[]
   bench1Char: CardInGame[]
   bench2Char: CardInGame[]
-  isClicked: boolean
-  isHovering: boolean
-  idForCardDetail: string
 }
 
 function App() {
   let [state, setState] = useImmer<AppState>({
-    totalDices: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],
     rawDices: [[], []],
     activeChar: [{
       base: Cards.Diluc,
@@ -60,17 +54,19 @@ function App() {
       currentHp: 10,
       currentEnergy: 0
     }],
-
-    // For displaying the card detail popup
-    // TODO isClicked not used right now, may want to add handle for that later
-    //  (click on card to make the card detail popup sticky)
-    isClicked: false,
-    isHovering: false,
-    idForCardDetail: ''
   });
   const [isRollDiceDialogOpened, setRollDiceDialogOpened] = useState<boolean>(false);
   const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = useState<boolean>(false);
   const [selectedSkillCostString, setSelectedSkillCostString] = useState<string>("");
+
+  // For displaying the card detail popup
+  // TODO isClicked not used right now, may want to add handle for that later
+  //  (click on card to make the card detail popup sticky)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isCardClicked, setCardClicked] = useState<boolean>(false);
+  const [isHovering, setHovering] = useState<boolean>(false);
+  const [idForCardDetail, setIdForCardDetail] = useState<string>('');
+
   const [currentPlayer, setCurrentPlayer] = useState<number>(0);
   const [currentActiveCard, setCurrentActiveCard] = useState<CardInGame>(state.activeChar[0]);
   const [currentSkillType, setCurrentSkillType] = useState<CharacterSkillType>(CharacterSkillType.Normal);
@@ -85,11 +81,9 @@ function App() {
 
   function closeRollDiceDialog(player: number, result: number[]) {
     setRollDiceDialogOpened(false);
-    let newCountArr = rawDicesToTotalDices(result);
     let sortedRawDices = result.sort();
 
     setState(draft => {
-      draft.totalDices[player] = newCountArr;
       draft.rawDices[player] = sortedRawDices;
     })
   }
@@ -112,9 +106,7 @@ function App() {
       }
     }
 
-    let newCountArr = rawDicesToTotalDices(newRawDices);
     setState(draft => {
-        draft.totalDices[player] = newCountArr;
         draft.rawDices[player] = newRawDices;
     })
 
@@ -167,24 +159,20 @@ function App() {
   }
 
   function onMouseEnter(event: any) {
-    if (state.isClicked) {
+    if (isCardClicked) {
       return;
     }
 
-    setState(draft => {
-      draft.isHovering = true;
-      draft.idForCardDetail = event.target.id;
-    });
+    setHovering(true);
+    setIdForCardDetail(event.target.id);
   }
 
   function onMouseLeave(_event: any) {
-    if (state.isClicked) {
+    if (isCardClicked) {
       return;
     }
 
-    setState(draft => {
-      draft.isHovering = false;
-    });
+    setHovering(false);
   }
 
   function getCardByUiId(id: string) {
@@ -234,7 +222,7 @@ function App() {
                             cancelFn={cancelSelectDiceCostDialog}
                             dices={state.rawDices[currentPlayer]}
                             costString={selectedSkillCostString}/>
-      {(state.isHovering || state.isClicked) && <CardDetailPopup card={getCardByUiId(state.idForCardDetail)}/>}
+      {(isHovering || isCardClicked) && <CardDetailPopup card={getCardByUiId(idForCardDetail)}/>}
       <div id="left-panel">Event log</div>
 
       <div id="right-panel">
