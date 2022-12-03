@@ -10,11 +10,14 @@ import AvailableDiceUI from "./ui/AvailableDiceUI";
 import ActiveCharSkillTable from "./ui/ActiveCharSkillTable";
 import ActionBoxUI from "./ui/ActionBoxUI";
 import {useImmer} from "use-immer";
+import {DilucElementalSkillLogic} from "./data/Diluc";
+import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
 
 export type CardInGame = {
   base: Card
   currentHp: number
   currentEnergy: number
+  eleSkillLogic?: BaseElementalSkillLogic
 }
 
 type AppState = {
@@ -22,6 +25,7 @@ type AppState = {
   activeChar: CardInGame[]
   bench1Char: CardInGame[]
   bench2Char: CardInGame[]
+  round: number
 }
 
 function App() {
@@ -30,16 +34,18 @@ function App() {
     activeChar: [{
       base: Cards.Diluc,
       currentHp: 10,
-      currentEnergy: 0
+      currentEnergy: 0,
+      eleSkillLogic: new DilucElementalSkillLogic()
     }, {
       base: Cards.Diluc,
       currentHp: 10,
-      currentEnergy: 0
+      currentEnergy: 0,
+      eleSkillLogic: new DilucElementalSkillLogic()
     }],
     bench1Char: [{
       base: Cards.Ganyu,
       currentHp: 10,
-      currentEnergy: 0
+      currentEnergy: 0,
     }, {
       base: Cards.Ganyu,
       currentHp: 10,
@@ -54,6 +60,7 @@ function App() {
       currentHp: 10,
       currentEnergy: 0
     }],
+    round: 0
   });
   const [isRollDiceDialogOpened, setRollDiceDialogOpened] = useState<boolean>(false);
   const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = useState<boolean>(false);
@@ -123,9 +130,17 @@ function App() {
       dmg = card.base.skills.normal.dmg;
       energyToGain += 1;
     }
+    else if (skillType === CharacterSkillType.Skill) {
+      dmg = card.eleSkillLogic?.getDamage() || 0; // TODO remove || 0
+      energyToGain += 1;
+    }
 
     let newTargetHp = target.currentHp - dmg;
     let newSourceEnergy = card.currentEnergy + energyToGain;
+
+    if (card.eleSkillLogic) {
+      card.eleSkillLogic.onAfterSkillUsed();
+    }
 
     setState(draft => {
       draft.activeChar[targetPlayer].currentHp = newTargetHp;

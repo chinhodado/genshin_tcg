@@ -1,4 +1,6 @@
 import {CardType, ElementType, WeaponType} from "./Enum";
+import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
+import {DilucElementalSkillLogic} from "./data/Diluc";
 
 export type Card = {
   id: number
@@ -20,6 +22,7 @@ export type Card = {
       cost: string
       desc: string
       dmgElement: ElementType
+      logic?: typeof BaseElementalSkillLogic // TODO not optional?
     }
     burst: {
       name: string
@@ -62,6 +65,7 @@ export const Cards: CardMap = {
         cost: "PPP",
         desc: "Deals 3 Pyro DMG. For the third use of this Skill each Round, deals +2 DMG.",
         dmgElement: ElementType.Pyro,
+        logic: DilucElementalSkillLogic
       },
       burst: {
         name: "Dawn",
