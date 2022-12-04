@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {CharacterSkillType} from "./Enum";
+import {CharacterSkillType, ElementType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
@@ -10,14 +10,17 @@ import AvailableDiceUI from "./ui/AvailableDiceUI";
 import ActiveCharSkillTable from "./ui/ActiveCharSkillTable";
 import ActionBoxUI from "./ui/ActionBoxUI";
 import {useImmer} from "use-immer";
-import {DilucElementalSkillLogic} from "./data/Diluc";
+import {DilucBurstLogic, DilucElementalSkillLogic} from "./data/Diluc";
 import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
+import {BaseBurstLogic} from "./data/BaseBurstLogic";
 
 export type CardInGame = {
   base: Card
   currentHp: number
   currentEnergy: number
   eleSkillLogic?: BaseElementalSkillLogic
+  burstLogic?: BaseBurstLogic
+  infusion: ElementType
 }
 
 type AppState = {
@@ -35,30 +38,38 @@ function App() {
       base: Cards.Diluc,
       currentHp: 10,
       currentEnergy: 0,
-      eleSkillLogic: new DilucElementalSkillLogic()
+      eleSkillLogic: new DilucElementalSkillLogic(),
+      burstLogic: new DilucBurstLogic(),
+      infusion: ElementType.Empty
     }, {
       base: Cards.Diluc,
       currentHp: 10,
       currentEnergy: 0,
-      eleSkillLogic: new DilucElementalSkillLogic()
+      eleSkillLogic: new DilucElementalSkillLogic(),
+      burstLogic: new DilucBurstLogic(),
+      infusion: ElementType.Empty
     }],
     bench1Char: [{
       base: Cards.Ganyu,
       currentHp: 10,
       currentEnergy: 0,
+      infusion: ElementType.Empty
     }, {
       base: Cards.Ganyu,
       currentHp: 10,
-      currentEnergy: 0
+      currentEnergy: 0,
+      infusion: ElementType.Empty
     }],
     bench2Char: [{
       base: Cards.Xingqiu,
       currentHp: 10,
-      currentEnergy: 0
+      currentEnergy: 0,
+      infusion: ElementType.Empty
     }, {
       base: Cards.Xingqiu,
       currentHp: 10,
-      currentEnergy: 0
+      currentEnergy: 0,
+      infusion: ElementType.Empty
     }],
     round: 0
   });
@@ -126,6 +137,8 @@ function App() {
 
     let dmg = 0;
     let energyToGain = 0;
+    // TODO when does infusion last? forever/end of round?
+    let infusion = ElementType.Empty;
     if (skillType === CharacterSkillType.Normal) {
       dmg = card.base.skills.normal.dmg;
       energyToGain += 1;
@@ -134,9 +147,20 @@ function App() {
       dmg = card.eleSkillLogic?.getDamage() || 0; // TODO remove || 0
       energyToGain += 1;
     }
+    else if (skillType === CharacterSkillType.Burst) {
+      dmg = card.burstLogic?.getDamage() || 0; // TODO remove || 0
+      infusion = card.burstLogic?.infusionAfterUse() || ElementType.Empty; // TODO remove ||
+    }
 
     let newTargetHp = target.currentHp - dmg;
-    let newSourceEnergy = card.currentEnergy + energyToGain;
+
+    let newSourceEnergy: number;
+    if (skillType === CharacterSkillType.Burst) {
+      newSourceEnergy = 0;
+    }
+    else {
+      newSourceEnergy = Math.min(card.currentEnergy + energyToGain, card.base.skills.burst.energy);
+    }
 
     if (card.eleSkillLogic) {
       card.eleSkillLogic.onAfterSkillUsed();
@@ -146,6 +170,12 @@ function App() {
       draft.activeChar[targetPlayer].currentHp = newTargetHp;
       draft.activeChar[player].currentEnergy = newSourceEnergy;
     })
+
+    if (infusion !== ElementType.Empty) {
+      setState(draft => {
+        draft.activeChar[player].infusion = infusion;
+      })
+    }
   }
 
   function cancelSelectDiceCostDialog() {

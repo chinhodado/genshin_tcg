@@ -1,4 +1,5 @@
 import {BaseElementalSkillLogic} from "./BaseElementalSkillLogic";
+import {ElementType} from "../Enum";
 
 export class DilucElementalSkillLogic extends BaseElementalSkillLogic {
   private skillUsedInRound: number;
@@ -25,5 +26,15 @@ export class DilucElementalSkillLogic extends BaseElementalSkillLogic {
     }
 
     return dmg;
+  }
+}
+
+export class DilucBurstLogic {
+  infusionAfterUse() {
+    return ElementType.Pyro;
+  }
+
+  getDamage() {
+    return 8;
   }
 }

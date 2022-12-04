@@ -1,6 +1,7 @@
 import {CardType, ElementType, WeaponType} from "./Enum";
 import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
-import {DilucElementalSkillLogic} from "./data/Diluc";
+import {DilucBurstLogic, DilucElementalSkillLogic} from "./data/Diluc";
+import {BaseBurstLogic} from "./data/BaseBurstLogic";
 
 export type Card = {
   id: number
@@ -30,6 +31,7 @@ export type Card = {
       energy: number
       desc: string
       dmgElement: ElementType
+      logic?: typeof BaseBurstLogic // TODO not optional?
     }
     special?: {
       name: string
@@ -73,6 +75,7 @@ export const Cards: CardMap = {
         energy: 3,
         desc: "Deals 8 Pyro DMG. This character gains Pyro Infusion.",
         dmgElement: ElementType.Pyro,
+        logic: DilucBurstLogic
       }
     }
   },
