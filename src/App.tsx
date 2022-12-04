@@ -21,6 +21,7 @@ export type CardInGame = {
   eleSkillLogic?: BaseElementalSkillLogic
   burstLogic?: BaseBurstLogic
   infusion: ElementType
+  affectedElements: ElementType[]
 }
 
 type AppState = {
@@ -40,36 +41,42 @@ function App() {
       currentEnergy: 0,
       eleSkillLogic: new DilucElementalSkillLogic(),
       burstLogic: new DilucBurstLogic(),
-      infusion: ElementType.Empty
+      infusion: ElementType.Empty,
+      affectedElements: []
     }, {
       base: Cards.Diluc,
       currentHp: 10,
       currentEnergy: 0,
       eleSkillLogic: new DilucElementalSkillLogic(),
       burstLogic: new DilucBurstLogic(),
-      infusion: ElementType.Empty
+      infusion: ElementType.Empty,
+      affectedElements: []
     }],
     bench1Char: [{
       base: Cards.Ganyu,
       currentHp: 10,
       currentEnergy: 0,
-      infusion: ElementType.Empty
+      infusion: ElementType.Empty,
+      affectedElements: []
     }, {
       base: Cards.Ganyu,
       currentHp: 10,
       currentEnergy: 0,
-      infusion: ElementType.Empty
+      infusion: ElementType.Empty,
+      affectedElements: []
     }],
     bench2Char: [{
       base: Cards.Xingqiu,
       currentHp: 10,
       currentEnergy: 0,
-      infusion: ElementType.Empty
+      infusion: ElementType.Empty,
+      affectedElements: []
     }, {
       base: Cards.Xingqiu,
       currentHp: 10,
       currentEnergy: 0,
-      infusion: ElementType.Empty
+      infusion: ElementType.Empty,
+      affectedElements: []
     }],
     round: 0
   });
@@ -139,6 +146,8 @@ function App() {
     let energyToGain = 0;
     // TODO when does infusion last? forever/end of round?
     let infusion = ElementType.Empty;
+
+    let targetAffectedElements = [...target.affectedElements];
     if (skillType === CharacterSkillType.Normal) {
       dmg = card.base.skills.normal.dmg;
       energyToGain += 1;
@@ -146,10 +155,22 @@ function App() {
     else if (skillType === CharacterSkillType.Skill) {
       dmg = card.eleSkillLogic?.getDamage() || 0; // TODO remove || 0
       energyToGain += 1;
+
+      // TODO
+      let elementToApply = card.base.skills.skill.dmgElement;
+      if (!targetAffectedElements.includes(elementToApply)) {
+        targetAffectedElements.push(elementToApply);
+      }
     }
     else if (skillType === CharacterSkillType.Burst) {
       dmg = card.burstLogic?.getDamage() || 0; // TODO remove || 0
       infusion = card.burstLogic?.infusionAfterUse() || ElementType.Empty; // TODO remove ||
+
+      // TODO
+      let elementToApply = card.base.skills.burst.dmgElement;
+      if (!targetAffectedElements.includes(elementToApply)) {
+        targetAffectedElements.push(elementToApply);
+      }
     }
 
     let newTargetHp = target.currentHp - dmg;
@@ -169,6 +190,7 @@ function App() {
     setState(draft => {
       draft.activeChar[targetPlayer].currentHp = newTargetHp;
       draft.activeChar[player].currentEnergy = newSourceEnergy;
+      draft.activeChar[targetPlayer].affectedElements = targetAffectedElements;
     })
 
     if (infusion !== ElementType.Empty) {

@@ -1,5 +1,6 @@
 import React from "react";
 import {CardInGame} from "../App";
+import {ImageMap} from "../Enum";
 
 type CardUIProps = {
   card: CardInGame
@@ -31,6 +32,18 @@ function CardUI(props: CardUIProps) {
     return arr;
   }
 
+  function getAffectedElementsIndicator() {
+    let arr = [];
+    for (let i = 0; i < props.card.affectedElements.length; i++) {
+      let element = props.card.affectedElements[i];
+      let img = <img className="dice-aura"
+                     src={"img/" + ImageMap[element]}
+                     alt="aura" key={i}/>
+      arr.push(img);
+    }
+    return arr;
+  }
+
   let hpTooltip = "Current HP: " + props.card.currentHp;
   let energyTooltip = "Energy: " + props.card.currentEnergy + "/" + props.card.base.skills.burst.energy;
 
@@ -38,6 +51,7 @@ function CardUI(props: CardUIProps) {
     <div className="card-ui" id={props.id}>
       <div className="card-hp" title={hpTooltip}>{props.card.currentHp}</div>
       <div className="card-energy" title={energyTooltip}>{getEnergyIndicators()}</div>
+      <div className="card-affected-element">{getAffectedElementsIndicator()}</div>
       {props.charPosition === 0 || <input type="button" value="Switch" className="char-switch-button" onClick={switchChar}/>}
       <img src={imgPath} alt="card" className="card" id={props.id + "-img"} onMouseEnter={props.onMouseEnter} onMouseLeave={props.onMouseLeave}/>
     </div>
