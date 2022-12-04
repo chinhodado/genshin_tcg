@@ -25,6 +25,20 @@ function EventLogView(props: EventLogViewProps) {
         Old active character: {event.charSwitch?.oldActiveChar}<br/>
         New active character: {event.charSwitch?.newActiveChar}</span>)
     }
+    else if (event.type === GameEventType.USE_SKILL) {
+      return (
+        <div>Player {event.player + 1} uses skill {event.skillResult?.skill.name}.
+          <ul>
+            <li>
+              Dice used: {dicesToLog(event.diceUsed as number[])}
+            </li>
+            <li>
+              Damage: {event.skillResult?.dmg}
+            </li>
+          </ul>
+        </div>
+      )
+    }
 
     return `Unknown event`;
   }

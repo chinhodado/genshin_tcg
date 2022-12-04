@@ -41,6 +41,11 @@ export type GameEvent = {
     oldActiveChar: string
     newActiveChar: string
   }
+  diceUsed?: number[]
+  skillResult?: {
+    skill: any
+    dmg: number
+  }
 }
 
 function App() {
@@ -144,10 +149,13 @@ function App() {
     }
 
     let newRawDices: number[] = [];
-
+    let costPaid: number[] = [];
     for (let i = 0; i < rawDices.length; i++) {
       if (!selectedDices[i]) {
         newRawDices.push(rawDices[i]);
+      }
+      else {
+        costPaid.push(rawDices[i]);
       }
     }
 
@@ -155,10 +163,10 @@ function App() {
         draft.rawDices[player] = newRawDices;
     })
 
-    performSkill(player, card, skillType);
+    performSkill(player, card, skillType, costPaid);
   }
 
-  function performSkill(player: number, card: CardInGame, skillType: CharacterSkillType) {
+  function performSkill(player: number, card: CardInGame, skillType: CharacterSkillType, costPaid: number[]) {
     let targetPlayer = player === 0? 1 : 0;
     let target = state.activeChar[targetPlayer];
 
@@ -168,11 +176,14 @@ function App() {
     let infusion = ElementType.Empty;
 
     let targetAffectedElements = [...target.affectedElements];
+    let skill: any;
     if (skillType === CharacterSkillType.Normal) {
+      skill = card.base.skills.normal;
       dmg = card.base.skills.normal.dmg;
       energyToGain += 1;
     }
     else if (skillType === CharacterSkillType.Skill) {
+      skill = card.base.skills.skill;
       dmg = card.eleSkillLogic?.getDamage() || 0; // TODO remove || 0
       energyToGain += 1;
 
@@ -183,6 +194,7 @@ function App() {
       }
     }
     else if (skillType === CharacterSkillType.Burst) {
+      skill = card.base.skills.burst;
       dmg = card.burstLogic?.getDamage() || 0; // TODO remove || 0
       infusion = card.burstLogic?.infusionAfterUse() || ElementType.Empty; // TODO remove ||
 
@@ -218,6 +230,18 @@ function App() {
         draft.activeChar[player].infusion = infusion;
       })
     }
+
+    setEvents(draft => {
+      draft.push({
+        type: GameEventType.USE_SKILL,
+        player: player,
+        diceUsed: costPaid,
+        skillResult: {
+          skill: skill,
+          dmg: dmg
+        }
+      })
+    })
   }
 
   function cancelSelectDiceCostDialog() {

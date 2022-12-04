@@ -95,6 +95,7 @@ body {
 #left-panel {
   border-right:  1px solid black;
   width: 300px;
+    overflow-y: scroll;
 }
 
 #right-panel {
