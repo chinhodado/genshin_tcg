@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {CharacterSkillType, ElementType, GameEventType, ImageMap} from "./Enum";
+import {CharacterSkillType, ElementType, GameEventType} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
@@ -35,8 +35,12 @@ type AppState = {
 
 export type GameEvent = {
   type: GameEventType
-  player: number,
+  player: number
   diceResult?: number[]
+  charSwitch?: {
+    oldActiveChar: string
+    newActiveChar: string
+  }
 }
 
 function App() {
@@ -226,10 +230,10 @@ function App() {
   }, []);
 
   function switchActiveChar(player: number, charPos: number) {
-    setState(draft => {
-      let oldActiveChar = draft.activeChar[player];
-      let oldBenchChar = charPos === 1? draft.bench1Char[player] : draft.bench2Char[player];
+    let oldActiveChar = state.activeChar[player];
+    let oldBenchChar = charPos === 1? state.bench1Char[player] : state.bench2Char[player];
 
+    setState(draft => {
       draft.activeChar[player] = oldBenchChar;
 
       if (charPos === 1) {
@@ -238,6 +242,17 @@ function App() {
       else {
         draft.bench2Char[player] = oldActiveChar;
       }
+    })
+
+    setEvents(draft => {
+      draft.push({
+        type: GameEventType.SWITCH_CHARACTER,
+        player: player,
+        charSwitch: {
+          oldActiveChar: oldActiveChar.base.name,
+          newActiveChar: oldBenchChar.base.name
+        }
+      })
     })
   }
 

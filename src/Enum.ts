@@ -62,5 +62,6 @@ export const ImageMap: any = {
 }
 
 export enum GameEventType {
-  ROLL_DICE
+  ROLL_DICE,
+  SWITCH_CHARACTER
 }

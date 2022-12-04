@@ -20,6 +20,11 @@ function EventLogView(props: EventLogViewProps) {
     if (event.type === GameEventType.ROLL_DICE) {
       return (<span>Player {event.player + 1} rolls dice. Result: <br/>{dicesToLog(event.diceResult as number[])}</span>)
     }
+    else if (event.type === GameEventType.SWITCH_CHARACTER) {
+      return (<span>Player {event.player + 1} switches active character. <br/>
+        Old active character: {event.charSwitch?.oldActiveChar}<br/>
+        New active character: {event.charSwitch?.newActiveChar}</span>)
+    }
 
     return `Unknown event`;
   }
