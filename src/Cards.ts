@@ -4,7 +4,6 @@ import {DilucBurstLogic, DilucElementalSkillLogic} from "./data/Diluc";
 import {BaseBurstLogic} from "./data/BaseBurstLogic";
 
 export type Card = {
-  id: number
   name: string
   img: string
   element: ElementType
@@ -40,8 +39,7 @@ export interface CardMap {
 }
 
 export const Cards: CardMap = {
-  "Diluc": {
-    id: 1,
+  Diluc: {
     name: "Diluc",
     element: ElementType.Pyro,
     weapon: WeaponType.Claymore,
@@ -72,8 +70,7 @@ export const Cards: CardMap = {
       }
     }
   },
-  "Xingqiu": {
-    id: 2,
+  Xingqiu: {
     name: "Xingqiu",
     element: ElementType.Hydro,
     weapon: WeaponType.Sword,
@@ -102,8 +99,7 @@ export const Cards: CardMap = {
       }
     }
   },
-  "Ganyu": {
-    id: 3,
+  Ganyu: {
     name: "Ganyu",
     element: ElementType.Cryo,
     weapon: WeaponType.Bow,
@@ -136,6 +132,35 @@ export const Cards: CardMap = {
         desc: "Deals 2 Cryo DMG, deals 2 Piercing DMG to all opposing characters on standby.",
         dmgElement: ElementType.Cryo,
       }
+    }
+  },
+  Barbara: {
+    name: "Barbara",
+    element: ElementType.Hydro,
+    weapon: WeaponType.Catalyst,
+    cardType: CardType.Character,
+    img: "i_n330025",
+    skills: {
+      normal: {
+        name: "Whisper of Water",
+        cost: "BBH",
+        desc: "Deals 1 Hydro DMG.",
+        dmg: 1,
+        dmgElement: ElementType.Hydro
+      },
+      skill: {
+        name: "Let the Show Begin♪",
+        cost: "HHH",
+        desc: "Deals 1 Hydro DMG, summons 1 Melody Loop.",
+        dmgElement: ElementType.Hydro,
+      },
+      burst: {
+        name: "Shining Miracle♪",
+        cost: "HHH",
+        energy: 3,
+        desc: "Heals all your characters for 4 HP.",
+        dmgElement: ElementType.Hydro,
+      },
     }
   }
 }

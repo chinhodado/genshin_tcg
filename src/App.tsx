@@ -15,6 +15,7 @@ import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
 import {BaseBurstLogic} from "./data/BaseBurstLogic";
 import EventLogView from "./ui/EventLogView";
 import MessageDialog from "./ui/MessageDialog";
+import {isBasicElement} from "./Util";
 
 export type CardInGame = {
   base: Card
@@ -61,11 +62,9 @@ function App() {
       infusion: ElementType.Empty,
       affectedElements: []
     }, {
-      base: Cards.Diluc,
+      base: Cards.Barbara,
       currentHp: 10,
       currentEnergy: 0,
-      eleSkillLogic: new DilucElementalSkillLogic(),
-      burstLogic: new DilucBurstLogic(),
       infusion: ElementType.Empty,
       affectedElements: []
     }],
@@ -189,6 +188,7 @@ function App() {
 
     let targetAffectedElements = [...target.affectedElements];
     let skill: CardSkill;
+
     if (skillType === CharacterSkillType.Normal) {
       skill = card.base.skills.normal;
       dmg = card.base.skills.normal.dmg as number;
@@ -198,27 +198,20 @@ function App() {
       skill = card.base.skills.skill;
       dmg = card.eleSkillLogic?.getDamage() || 0; // TODO remove || 0
       energyToGain += 1;
-
-      // TODO
-      let elementToApply = card.base.skills.skill.dmgElement;
-      if (!targetAffectedElements.includes(elementToApply)) {
-        targetAffectedElements.push(elementToApply);
-      }
     }
     else if (skillType === CharacterSkillType.Burst) {
       skill = card.base.skills.burst;
       dmg = card.burstLogic?.getDamage() || 0; // TODO remove || 0
       infusion = card.burstLogic?.infusionAfterUse() || ElementType.Empty; // TODO remove ||
-
-      // TODO
-      let elementToApply = card.base.skills.burst.dmgElement;
-      if (!targetAffectedElements.includes(elementToApply)) {
-        targetAffectedElements.push(elementToApply);
-      }
     }
     else {
       alert("unknown skill type");
       skill = card.base.skills.skill;
+    }
+
+    let elementToApply = skill.dmgElement;
+    if (!targetAffectedElements.includes(elementToApply) && isBasicElement(elementToApply)) {
+      targetAffectedElements.push(elementToApply);
     }
 
     let newTargetHp = target.currentHp - dmg;

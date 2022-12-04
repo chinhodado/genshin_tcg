@@ -27,7 +27,7 @@ function EventLogView(props: EventLogViewProps) {
     }
     else if (event.type === GameEventType.USE_SKILL) {
       return (
-        <div>Player {event.player + 1} uses skill {event.skillResult?.skill.name}.
+        <div>Player {event.player + 1} uses skill {event.skillResult?.skill.name}
           <ul>
             <li>
               Dice used: {dicesToLog(event.diceUsed as number[])}
