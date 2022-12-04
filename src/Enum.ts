@@ -60,3 +60,7 @@ export const ImageMap: any = {
   [ElementType.Pyro]: "Element_Pyro.svg",
   [ElementType.Omni]: "Omni.svg"
 }
+
+export enum GameEventType {
+  ROLL_DICE
+}

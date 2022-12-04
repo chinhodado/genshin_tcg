@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
-import {CharacterSkillType, ElementType} from "./Enum";
+import {CharacterSkillType, ElementType, GameEventType, ImageMap} from "./Enum";
 import {Card, Cards} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
@@ -13,6 +13,7 @@ import {useImmer} from "use-immer";
 import {DilucBurstLogic, DilucElementalSkillLogic} from "./data/Diluc";
 import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
 import {BaseBurstLogic} from "./data/BaseBurstLogic";
+import EventLogView from "./ui/EventLogView";
 
 export type CardInGame = {
   base: Card
@@ -30,6 +31,12 @@ type AppState = {
   bench1Char: CardInGame[]
   bench2Char: CardInGame[]
   round: number
+}
+
+export type GameEvent = {
+  type: GameEventType
+  player: number,
+  diceResult?: number[]
 }
 
 function App() {
@@ -95,6 +102,7 @@ function App() {
   const [currentPlayer, setCurrentPlayer] = useState<number>(0);
   const [currentActiveCard, setCurrentActiveCard] = useState<CardInGame>(state.activeChar[0]);
   const [currentSkillType, setCurrentSkillType] = useState<CharacterSkillType>(CharacterSkillType.Normal);
+  const [events, setEvents] = useImmer<GameEvent[]>([])
 
   function openRollDiceDialog() {
     setRollDiceDialogOpened(true);
@@ -110,6 +118,14 @@ function App() {
 
     setState(draft => {
       draft.rawDices[player] = sortedRawDices;
+    })
+
+    setEvents(draft => {
+      draft.push({
+        type: GameEventType.ROLL_DICE,
+        player: player,
+        diceResult: sortedRawDices
+      })
     })
   }
 
@@ -290,7 +306,10 @@ function App() {
                             dices={state.rawDices[currentPlayer]}
                             costString={selectedSkillCostString}/>
       {(isHovering || isCardClicked) && <CardDetailPopup card={getCardByUiId(idForCardDetail)}/>}
-      <div id="left-panel">Event log</div>
+      <div id="left-panel">
+        <h3>Event log</h3>
+        <EventLogView events={events}/>
+      </div>
 
       <div id="right-panel">
         <div id="top-field">
