@@ -14,6 +14,7 @@ import {DilucBurstLogic, DilucElementalSkillLogic} from "./data/Diluc";
 import {BaseElementalSkillLogic} from "./data/BaseElementalSkillLogic";
 import {BaseBurstLogic} from "./data/BaseBurstLogic";
 import EventLogView from "./ui/EventLogView";
+import MessageDialog from "./ui/MessageDialog";
 
 export type CardInGame = {
   base: Card
@@ -100,6 +101,8 @@ function App() {
   const [isSelectDiceCostDialogOpened, setSelectDiceCostDialogOpened] = useState<boolean>(false);
   const [selectedSkillCostString, setSelectedSkillCostString] = useState<string>("");
 
+  const [isMessageDialogOpened, setMessageDialogOpened] = useState<boolean>(false);
+  const [messageForDialog, setMessageForDialog] = useState<string>('');
   // For displaying the card detail popup
   // TODO isClicked not used right now, may want to add handle for that later
   //  (click on card to make the card detail popup sticky)
@@ -119,6 +122,15 @@ function App() {
 
   function openSelectDiceCostDialog() {
     setSelectDiceCostDialogOpened(true);
+  }
+
+  function closeMessageDialog() {
+    setMessageDialogOpened(false);
+  }
+
+  function openMessageDialog(message: string) {
+    setMessageForDialog(message);
+    setMessageDialogOpened(true);
   }
 
   function closeRollDiceDialog(player: number, result: number[]) {
@@ -348,6 +360,7 @@ function App() {
                             cancelFn={cancelSelectDiceCostDialog}
                             dices={state.rawDices[currentPlayer]}
                             costString={selectedSkillCostString}/>
+      <MessageDialog isOpen={isMessageDialogOpened} message={messageForDialog} closeModal={closeMessageDialog}/>
       {(isHovering || isCardClicked) && <CardDetailPopup card={getCardByUiId(idForCardDetail)}/>}
       <div id="left-panel">
         <h3>Event log</h3>
@@ -365,7 +378,12 @@ function App() {
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
 
           <AvailableDiceUI id="available-dice-2" rawDices={state.rawDices[1]}/>
-          <ActiveCharSkillTable player={1} id="active-char-2-skills" char={state.activeChar[1].base} doActiveCharSkill={doActiveCharSkill}/>
+          <ActiveCharSkillTable
+            player={1} id="active-char-2-skills"
+            char={state.activeChar[1]}
+            doActiveCharSkill={doActiveCharSkill}
+            openMessageDialog={openMessageDialog}
+          />
           <ActionBoxUI id="action-box-2" player={1} onRollDiceClicked={rollDiceCallback}/>
         </div>
 
@@ -379,7 +397,12 @@ function App() {
                   onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}/>
 
           <AvailableDiceUI id="available-dice-1" rawDices={state.rawDices[0]}/>
-          <ActiveCharSkillTable player={0} id="active-char-1-skills" char={state.activeChar[0].base} doActiveCharSkill={doActiveCharSkill}/>
+          <ActiveCharSkillTable
+            player={0} id="active-char-1-skills"
+            char={state.activeChar[0]}
+            doActiveCharSkill={doActiveCharSkill}
+            openMessageDialog={openMessageDialog}
+          />
           <ActionBoxUI id="action-box-1" player={0} onRollDiceClicked={rollDiceCallback}/>
         </div>
       </div>

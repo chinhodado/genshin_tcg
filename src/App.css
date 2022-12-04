@@ -141,6 +141,7 @@ body {
 .active-char-skills-table {
   width: 100%;
   border-collapse: collapse;
+    cursor: pointer;
 }
 
 .active-char-skills-table td {

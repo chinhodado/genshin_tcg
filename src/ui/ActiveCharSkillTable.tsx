@@ -1,16 +1,32 @@
 import {CharacterSkillType} from "../Enum";
 import {getSkillCostDisplay} from "../Util";
 import React from "react";
-import {Card} from "../Cards";
+import {CardInGame} from "../App";
 
 export type ActiveCharSkillTableProps = {
   id: string
-  char: Card
+  char: CardInGame
   player: number
   doActiveCharSkill: (player: number, type: CharacterSkillType) => void
+  openMessageDialog: (message: string) => void
 }
 
 function ActiveCharSkillTable(props: ActiveCharSkillTableProps) {
+  function haveEnoughEnergy() {
+    return props.char.currentEnergy >= props.char.base.skills.burst.energy;
+  }
+
+  function onBurstSkillChosen() {
+    if (!haveEnoughEnergy()) {
+      props.openMessageDialog("Not enough energy for burst!")
+    }
+    else {
+      props.doActiveCharSkill(props.player, CharacterSkillType.Burst);
+    }
+  }
+
+  let skills = props.char.base.skills;
+
   return (
     <div id={props.id}>
       <div className="active-char-skills-label">
@@ -28,13 +44,13 @@ function ActiveCharSkillTable(props: ActiveCharSkillTableProps) {
         <tbody>
         <tr>
           <td onClick={() => props.doActiveCharSkill(props.player, CharacterSkillType.Normal)}>
-            {getSkillCostDisplay(props.char.skills.normal.cost)}
+            {getSkillCostDisplay(skills.normal.cost)}
           </td>
           <td onClick={() => props.doActiveCharSkill(props.player, CharacterSkillType.Skill)}>
-            {getSkillCostDisplay(props.char.skills.skill.cost)}
+            {getSkillCostDisplay(skills.skill.cost)}
           </td>
-          <td onClick={() => props.doActiveCharSkill(props.player, CharacterSkillType.Burst)}>
-            {getSkillCostDisplay(props.char.skills.burst.cost)} + ({props.char.skills.burst.energy}E)
+          <td onClick={onBurstSkillChosen}>
+            {getSkillCostDisplay(skills.burst.cost)} + ({skills.burst.energy}E)
           </td>
           <td></td>
         </tr>
