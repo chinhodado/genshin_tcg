@@ -1,5 +1,6 @@
 import {BaseElementalSkillLogic} from "./BaseElementalSkillLogic";
 import {ElementType} from "../Enum";
+import {Cards, CardSkill} from "../Cards";
 
 export class DilucElementalSkillLogic extends BaseElementalSkillLogic {
   private skillUsedInRound: number;
@@ -13,8 +14,10 @@ export class DilucElementalSkillLogic extends BaseElementalSkillLogic {
     this.skillUsedInRound = 0;
   }
 
-  onAfterSkillUsed() {
-    this.skillUsedInRound++;
+  onAfterSkillUsed(skillUsed: CardSkill) {
+    if (skillUsed.name === Cards.Diluc.skills.skill.name) {
+      this.skillUsedInRound++;
+    }
   }
 
   getDamage() {

@@ -11,35 +11,28 @@ export type Card = {
   weapon: WeaponType
   cardType: CardType
   skills: {
-    normal: {
-      name: string
-      cost: string
-      desc: string
-      dmg: number
-      dmgElement: ElementType
-    }
-    skill: {
-      name: string
-      cost: string
-      desc: string
-      dmgElement: ElementType
-      logic?: typeof BaseElementalSkillLogic // TODO not optional?
-    }
-    burst: {
-      name: string
-      cost: string
-      energy: number
-      desc: string
-      dmgElement: ElementType
-      logic?: typeof BaseBurstLogic // TODO not optional?
-    }
-    special?: {
-      name: string
-      cost: string
-      desc: string
-      dmgElement: ElementType
-    }
+    normal: CardSkill
+    skill: CardEleSkill
+    burst: CardBurstSkill
+    special?: CardSkill
   }
+}
+
+export type CardSkill = {
+  name: string
+  cost: string
+  desc: string
+  dmg?: number
+  dmgElement: ElementType
+}
+
+export type CardEleSkill = CardSkill & {
+  logic?: typeof BaseElementalSkillLogic
+}
+
+export type CardBurstSkill = CardSkill & {
+  logic?: typeof BaseBurstLogic
+  energy: number
 }
 
 export interface CardMap {

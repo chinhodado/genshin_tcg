@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import './App.css';
 import {CharacterSkillType, ElementType, GameEventType} from "./Enum";
-import {Card, Cards} from "./Cards";
+import {Card, Cards, CardSkill} from "./Cards";
 import CardUI from "./ui/CardUI";
 import CardDetailPopup from "./ui/CardDetailPopup";
 import RollDiceDialog from "./ui/RollDiceDialog";
@@ -176,10 +176,10 @@ function App() {
     let infusion = ElementType.Empty;
 
     let targetAffectedElements = [...target.affectedElements];
-    let skill: any;
+    let skill: CardSkill;
     if (skillType === CharacterSkillType.Normal) {
       skill = card.base.skills.normal;
-      dmg = card.base.skills.normal.dmg;
+      dmg = card.base.skills.normal.dmg as number;
       energyToGain += 1;
     }
     else if (skillType === CharacterSkillType.Skill) {
@@ -204,6 +204,10 @@ function App() {
         targetAffectedElements.push(elementToApply);
       }
     }
+    else {
+      alert("unknown skill type");
+      skill = card.base.skills.skill;
+    }
 
     let newTargetHp = target.currentHp - dmg;
 
@@ -216,7 +220,7 @@ function App() {
     }
 
     if (card.eleSkillLogic) {
-      card.eleSkillLogic.onAfterSkillUsed();
+      card.eleSkillLogic.onAfterSkillUsed(skill);
     }
 
     setState(draft => {

@@ -1,8 +1,10 @@
+import {CardSkill} from "../Cards";
+
 export class BaseElementalSkillLogic {
   onRoundStart() {
   }
 
-  onAfterSkillUsed() {
+  onAfterSkillUsed(skillUsed: CardSkill) {
   }
 
   getDamage() {
