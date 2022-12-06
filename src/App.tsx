@@ -27,7 +27,7 @@ export type CardInGame = {
   affectedElements: ElementType[]
 }
 
-type AppState = {
+export type GameState = {
   rawDices: number[][]
   activeChar: CardInGame[]
   bench1Char: CardInGame[]
@@ -51,7 +51,7 @@ export type GameEvent = {
 }
 
 function App() {
-  let [state, setState] = useImmer<AppState>({
+  let [state, setState] = useImmer<GameState>({
     rawDices: [[], []],
     activeChar: [{
       base: Cards.Diluc,
